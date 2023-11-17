@@ -1,4 +1,0 @@
-EntityID	Embedding	UAL
-http://example.org/companies/CleanEnergyCo	http://schema.org/industry:renewable energy; http://schema.org/name:Clean Energy Co	did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/978802
-http://example.org/investors/Investor123		did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/978802
-http://example.org/companies/WindPowerInc	http://schema.org/industry:renewable energy; http://schema.org/name:Wind Power Inc	did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/978802
