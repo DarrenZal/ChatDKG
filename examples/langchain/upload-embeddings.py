@@ -19,8 +19,7 @@ vector_db = Milvus(
     embedding_function=HuggingFaceEmbeddings(model_name="multi-qa-MiniLM-L6-cos-v1"),
     connection_args={
         "uri": os.getenv("MILVUS_URI"),
-        "user": os.getenv("MILVUS_USER"),
-        "password": os.getenv("MILVUS_PASSWORD"),
+        "token": os.getenv("MILVUS_TOKEN"),
         "secure": True,
     },
 )

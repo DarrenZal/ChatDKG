@@ -1,0 +1,47 @@
+{
+  "operation": {
+    "publicGet": {
+      "operationId": "a26efd2d-2409-468d-aee8-cd5ddf3c8ed9",
+      "status": "COMPLETED"
+    }
+  },
+  "assertion": [
+    {
+      "@id": "http://example.org/companies/CleanEnergyCo",
+      "http://schema.org/industry": [
+        {
+          "@value": "renewable energy"
+        }
+      ],
+      "http://schema.org/investor": [
+        {
+          "@id": "http://example.org/investors/Investor123"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Clean Energy Co"
+        }
+      ]
+    },
+    {
+      "@id": "http://example.org/companies/WindPowerInc",
+      "http://schema.org/industry": [
+        {
+          "@value": "renewable energy"
+        }
+      ],
+      "http://schema.org/investor": [
+        {
+          "@id": "http://example.org/investors/Investor123"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Wind Power Inc"
+        }
+      ]
+    }
+  ],
+  "assertionId": "0x4a3abb7542618f0b84a2b5d06bddb9d541ba0677e1484e374a95495f029f0d9e"
+}

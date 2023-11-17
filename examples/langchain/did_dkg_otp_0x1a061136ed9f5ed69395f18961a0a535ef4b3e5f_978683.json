@@ -1,0 +1,29 @@
+{
+  "operation": {
+    "publicGet": {
+      "operationId": "d6674ead-3c71-4237-bb20-78f723889fed",
+      "status": "COMPLETED"
+    }
+  },
+  "assertion": [
+    {
+      "@id": "http://example.org/companies/BioGenX",
+      "http://schema.org/industry": [
+        {
+          "@value": "biotechnology"
+        }
+      ],
+      "http://schema.org/investor": [
+        {
+          "@id": "http://example.org/investors/Investor123"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "BioGenX"
+        }
+      ]
+    }
+  ],
+  "assertionId": "0x4cb592ab5366d5e071335f5d2bee1dc488bbd54f5cfa2e07f678171b9e64fb1a"
+}

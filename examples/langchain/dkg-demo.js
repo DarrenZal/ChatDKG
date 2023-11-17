@@ -1,14 +1,11 @@
-// This is a simple example of creating a Knowledge Asset from a JSON file on OriginTrail DKG
-
 import "dotenv/config";
 import DKG from "dkg.js";
 import fs from "fs";
 
-// Load the content of the Knowledge Asset (using an imaginary medicine "Yewmakerol" leaflet as content
-const yewmakerol = JSON.parse(fs.readFileSync("../utils/yewmakerol.json"));
+// Parse the JSON data from file
+const jsonData = JSON.parse(fs.readFileSync("../utils/investor_data.json"));
 
-
-// initialize the DKG client on OriginTrail DKG Testnet
+// Initialize the DKG client on OriginTrail DKG Testnet
 const dkg = new DKG({
   endpoint: process.env.OT_NODE_HOSTNAME,
   blockchain: {
@@ -18,12 +15,21 @@ const dkg = new DKG({
   },
 });
 
-
-// NOTE: You will need OTP and TRAC testnet tokens for the next operation. You can get them on the OriginTrail Discord token faucet, as explained here: 
-// https://docs.origintrail.io/decentralized-knowledge-graph-layer-2/testnet-node-setup-instructions/fund-your-v6-testnet-node
-(async () => {
-   // creating a Knowledge Asset on OriginTrail DKG
-    const creationResult = await dkg.asset.create(yewmakerol, { epochsNum: 5 });
-
+// Function to create a Knowledge Asset on OriginTrail DKG
+async function createKnowledgeAsset(data) {
+  try {
+    await dkg.asset.increaseAllowance('1969429592284014000');
+    const creationResult = await dkg.asset.create(data, { epochsNum: 3 });
     console.log(`Knowledge asset UAL: ${creationResult.UAL}`);
+  } catch (error) {
+    console.error("Error creating Knowledge Asset:", error);
+  }
+}
+
+// Main function to iterate over sections and create assets
+(async () => {
+  for (const section in jsonData) {
+    console.log(`Creating Knowledge Asset for section: ${section}`);
+    await createKnowledgeAsset(jsonData[section]);
+  }
 })();

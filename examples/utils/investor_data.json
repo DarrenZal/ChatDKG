@@ -1,0 +1,35 @@
+{
+ 
+  "OtherCompanies": [
+    {
+      "@context": {
+        "name": "http://schema.org/name",
+        "industry": "http://schema.org/industry",
+        "investor": {
+          "@id": "http://schema.org/investor",
+          "@type": "@id"
+        },
+        "schema": "http://schema.org/"
+      },
+      "@id": "http://example.org/companies/CleanEnergyCo",
+      "name": "Clean Energy Co",
+      "industry": "renewable energy",
+      "investor": "http://example.org/investors/Investor123"
+    },
+    {
+      "@context": {
+        "name": "http://schema.org/name",
+        "industry": "http://schema.org/industry",
+        "investor": {
+          "@id": "http://schema.org/investor",
+          "@type": "@id"
+        },
+        "schema": "http://schema.org/"
+      },
+      "@id": "http://example.org/companies/WindPowerInc",
+      "name": "Wind Power Inc",
+      "industry": "renewable energy",
+      "investor": "http://example.org/investors/Investor123"
+    }
+  ]
+}

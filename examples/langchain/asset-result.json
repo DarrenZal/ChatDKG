@@ -1,0 +1,10 @@
+{
+  "operation": {
+    "publicGet": {
+      "operationId": "d0e86c36-cb47-48f7-bf22-d2e73a4c9345",
+      "status": "FAILED",
+      "errorMessage": "Unsupported U escape",
+      "errorType": "GetLocalError"
+    }
+  }
+}

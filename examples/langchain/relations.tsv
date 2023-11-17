@@ -1,0 +1,3 @@
+SubjectID	Predicate	ObjectID
+http://example.org/companies/CleanEnergyCo	http://schema.org/investor	http://example.org/investors/Investor123
+http://example.org/companies/WindPowerInc	http://schema.org/investor	http://example.org/investors/Investor123
