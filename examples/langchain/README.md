@@ -1,4 +1,4 @@
-# ChatDKG - Extractive question answering with OriginTrail and Langchain
+# ChatDKG - Natural Language question answering on the OriginTrail Decentralized Knowledge Graph
 
 This example shows a basic extractive question answering application built with OriginTrail Knowledge Assets and Langchain. 
 It walks you through the process of creating a single Knowledge Asset on the OriginTrail Decentralized Knowledge Graph and necessary indexing operations to enable extractive question answering (EQA) using natural language based semantic search (such as in the form of asking a question) over the Knowledge Asset content using Langchain and Milvus Vector DB.
@@ -6,6 +6,9 @@ It walks you through the process of creating a single Knowledge Asset on the Ori
 In contrast to generative QA systems such as ChatGPT, an extractive system doesn't "hallucinate", rather only extracts content from within the verifiable Knowledge Asset. 
 Additionally, to extend the extractive approach, we also demonstrate an "extract & summarize" approach that takes the extracted content from the Knowledge Asset and submits it to an LLM (in this case OpenAI) to summarize.
 
+Additionaly, this code can turn a quesiton into a SPARQL query and run it on the DKG.  This code has been adapted to function as a FastAPI backend, serving requests from a front end, such as a chatbot web app.  
+An example can be found here: https://thick-nylon-eagle.fission.app/Chat/    
+The code for the front end can be found here: https://github.com/DarrenZal/Myseelia
 
 
 ## Pre-requisites
@@ -36,11 +39,12 @@ npm install
 ## Python Dependencies
 
 create a python virtual environement (optional)
-python -m venv venv
-
 ```bash
-Then, install Python dependencies:
+python -m venv venv
+source venv/bin/activate
 ```
+
+Then, install Python dependencies:
 
 ```bash
 pip install python-dotenv openai langchain pandas sentence-transformers pymilvus dkg
@@ -62,7 +66,8 @@ WALLET_PRIVATE_KEY=<Your Wallet Private Key>
 MILVUS_URI=<Your Milvus URI>
 MILVUS_USER=<Your Milvus User>
 MILVUS_PASSWORD=<Your Milvus Password>
-OPENAI_API_KEY=<Your OpenAI API Key>
+OPENAI_KEY=<Your OpenAI API Key>
+RPC_ENDPOINT=<Your Blockchain RPC URL>
 ```
 
 # Usage
@@ -154,7 +159,7 @@ sudo ufw allow 8000
 Use Uvicorn to run your application:
 
 ```bash
-`uvicorn app:app --host 0.0.0.0 --port 8000`
+uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
 This command will start your FastAPI application on port 8000.
