@@ -18,9 +18,9 @@ load_dotenv()
 
 yewmakerol = json.load(open('../utils/yewmakerol.json'))
 
-node_provider = NodeHTTPProvider(
-        os.getenv("OT_NODE_HOSTNAME")
-    )
+ot_node_hostname = os.getenv("OT_NODE_HOSTNAME") + ":8900"
+
+node_provider = NodeHTTPProvider(ot_node_hostname)
 blockchain_provider = BlockchainProvider(
         os.getenv("RPC_ENDPOINT"), 
         os.getenv("WALLET_PRIVATE_KEY")

@@ -84,15 +84,23 @@ async function fetchEntityDetails(entityUrl) {
   return { name: entityUrl, type: 'URL' };
 }
 
-function extractValue(value) {
-  if (typeof value === 'object') {
-    if (value['@id']) {
-      return value['@id'];
-    }
-    // Return the '@value' property for simpler representations
-    return value['@value'] || JSON.stringify(value);
+
+function extractType(typeUrl) {
+  if (Array.isArray(typeUrl)) {
+    typeUrl = typeUrl[0];
   }
-  return value;
+  const parts = typeUrl.split('#');
+  return parts.length > 1 ? parts[parts.length - 1] : parts[0].split('/').pop();
+}
+
+function extractValue(valueObject) {
+  if (valueObject['@value']) {
+    return valueObject['@value'];
+  }
+  if (valueObject['@id']) {
+    return valueObject['@id'];
+  }
+  return valueObject;
 }
 
 // Function to extract and convert assertions to TSV format for relations and attributes
@@ -100,7 +108,7 @@ async function assertionsToTsvAndEmbeddings(assertions, ual, allData, uniqueRela
   const entityEmbeddings = {};
 
   for (const item of assertions) {
-    const entityType = String(item['@type']).split('/').pop();
+    const entityType = extractType(item['@type']);
     const entityId = item['@id'];
 
     const embeddingWithUal = {
@@ -118,23 +126,32 @@ async function assertionsToTsvAndEmbeddings(assertions, ual, allData, uniqueRela
       if (predicate !== '@id' && predicate !== '@type') {
         const values = Array.isArray(item[predicate]) ? item[predicate] : [item[predicate]];
 
-        for (const value of values) {
-          let actualValue = extractValue(value);
-
-          if (typeof actualValue === 'string' && actualValue.startsWith('http://')) {
-            const entityDetails = await fetchEntityDetails(actualValue);
-            actualValue = entityDetails.name;
+        for (const valueObject of values) {
+          let actualValue = extractValue(valueObject);
+          let fullObjectType;
+          let objectTypeSuffix;
+      
+          if (valueObject['@type']) {
+            fullObjectType = valueObject['@type'];
+            objectTypeSuffix = extractType(fullObjectType); // Suffix extracted from the full type URL
+          } else if (typeof actualValue === 'string' && (actualValue.startsWith('http://') || actualValue.startsWith('_:'))) {
+              const entityDetails = await fetchEntityDetails(actualValue);
+              actualValue = entityDetails.name;
+              fullObjectType = entityDetails.type; // Full type URL
+              objectTypeSuffix = extractType(fullObjectType);
+          } else {
+              fullObjectType = 'http://www.w3.org/2001/XMLSchema#string'; // Default full type URL
+              objectTypeSuffix = 'String'; // Default type suffix
           }
-
+      
           const localPredicate = predicate.split('/').pop();
-          entityEmbeddings[entityId].attributes.push({ predicate: localPredicate, value: actualValue });
-
-          // Updating how the relation key and embedding are constructed
-          const fullPredicate = predicate; // Full URI predicate
-          const embedding = localPredicate; // Simplified to only include the predicate name
-          const relationKey = `${fullPredicate}\t${embedding}`; // Key with URI predicate and simplified embedding
+          entityEmbeddings[entityId].attributes.push({ predicate: localPredicate, value: actualValue, objectType: fullObjectType });
+      
+          const fullPredicate = predicate;
+          const embedding = `${entityType}, ${localPredicate}, ${objectTypeSuffix}`; // Use suffix here
+          const relationKey = `${entityType}\t${fullPredicate}\t${fullObjectType}`; // Use full type URL here
           uniqueRelations.set(relationKey, embedding);
-        }
+      }
       }
     }
   }
@@ -149,7 +166,7 @@ async function assertionsToTsvAndEmbeddings(assertions, ual, allData, uniqueRela
     "did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1165451",
     "did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1165486",
     "did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1165562",
-    "did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1165625"
+    "did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1165625" 
     // Add additional UALs here
   ];
 
@@ -174,9 +191,9 @@ async function assertionsToTsvAndEmbeddings(assertions, ual, allData, uniqueRela
   }
 
   // Create TSV rows from the unique relations with count
-  const relationHeader = 'Predicate\tEmbedding';
+  const relationHeader = 'SubjectType\tPredicate\tObjectType\tEmbedding';
   const relationRows = Array.from(uniqueRelations.entries()).map(([key, embedding]) => {
-    return `${key}`; // Simplified to prevent duplication
+    return `${key}\t${embedding}`;
   });
 
   // Write the combined TSV outputs to files
@@ -184,6 +201,4 @@ async function assertionsToTsvAndEmbeddings(assertions, ual, allData, uniqueRela
 
   // Write the combined TSV outputs to files
   fs.writeFileSync('entities.tsv', entityEmbeddingsToTsv(combinedEntityEmbeddings));
-
-
 })();

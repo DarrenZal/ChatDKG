@@ -2,7 +2,9 @@ import os
 import json
 from dotenv import load_dotenv
 
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key="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")
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import Milvus
 
@@ -35,24 +37,22 @@ vector_db_relations = Milvus(
 # question = "What organizations is Tomer Bariach involved with?"
 question = "What deals has ReFiDAO made?"
 
-openai.api_key = "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"
+
 
 
 def extract_entities_relations(question: str) -> (list, list):
     # Call the OpenAI ChatCompletion API
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {
-                "role": "system",
-                "content": "You receive a question, you identify the named-entities and relations in the question which will be used for named-entity and relation linking in order to convert the question into a SPARQL query.  For entities, onyl give a list of the named entities not the entities which are variables to be determined from the query."
-            },
-            {
-                "role": "user",
-                "content": f"Extract the entites and relations from this: {question}:",
-            },
-        ],
-    )
+    response = client.chat.completions.create(model="gpt-3.5-turbo",
+    messages=[
+        {
+            "role": "system",
+            "content": "You receive a question, you identify the named-entities and relations in the question which will be used for named-entity and relation linking in order to convert the question into a SPARQL query.  For entities, onyl give a list of the named entities not the entities which are variables to be determined from the query."
+        },
+        {
+            "role": "user",
+            "content": f"Extract the entites and relations from this: {question}:",
+        },
+    ])
 
     # Extract the response content
     extracted_content = response['choices'][0]['message']['content']
@@ -101,19 +101,17 @@ def construct_sparql_query_openai(question: str, matched_entities: list, matched
     print("full_iri_relations: ", full_iri_relations)
 
     # Call the OpenAI ChatCompletion API
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are to construct a SPARQL query based on a natural language question and given entities and relations. Convert the question's structure into a SPARQL query format. Please use full IRIs, not preficed IRIs."
-            },
-            {
-                "role": "user",
-                "content": f"Construct a SPARQL query for the question '{question}' using entities {entity_urns} and relations {full_iri_relations}. use full IRIs {full_iri_relations} in the Query, do not use preficed IRIs (PREFIX schema..)",
-            },
-        ],
-    )
+    response = client.chat.completions.create(model="gpt-3.5-turbo",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are to construct a SPARQL query based on a natural language question and given entities and relations. Convert the question's structure into a SPARQL query format. Please use full IRIs, not preficed IRIs."
+        },
+        {
+            "role": "user",
+            "content": f"Construct a SPARQL query for the question '{question}' using entities {entity_urns} and relations {full_iri_relations}. use full IRIs {full_iri_relations} in the Query, do not use preficed IRIs (PREFIX schema..)",
+        },
+    ])
 
     # Extract the SPARQL query from the response content
     sparql_query = response['choices'][0]['message']['content']

@@ -1,7 +1,11 @@
 import os
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key="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")
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key="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")
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import Milvus
 load_dotenv()
@@ -33,7 +37,7 @@ vector_db_relations = Milvus(
 )
 
 # Set your OpenAI API key
-openai.api_key = "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"
+
 
 # Specific question
 question = "What companies in the renewable energy sector have received investment from entities that also invested in BioGenX?"
@@ -41,19 +45,17 @@ question = "What companies in the renewable energy sector have received investme
 
 def extract_entities_relations(question: str) -> (list, list):
     # Call the OpenAI ChatCompletion API
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {
-                "role": "system",
-                "content": "You receive a question that will be used for entity linking and graph traversal.  I want to identify the entities in the question which I can map to my graph, then traverse the graph to find the answer to the question. format the response as Entities: followed by a comma seperate list of entities "
-            },
-            {
-                "role": "user",
-                "content": f"My goal is entity linking and graph traversal.  Take this question {question} and identify the entities in the question which I can link to entities in my graph",
-            },
-        ],
-    )
+    response = client.chat.completions.create(model="gpt-4",
+    messages=[
+        {
+            "role": "system",
+            "content": "You receive a question that will be used for entity linking and graph traversal.  I want to identify the entities in the question which I can map to my graph, then traverse the graph to find the answer to the question. format the response as Entities: followed by a comma seperate list of entities "
+        },
+        {
+            "role": "user",
+            "content": f"My goal is entity linking and graph traversal.  Take this question {question} and identify the entities in the question which I can link to entities in my graph",
+        },
+    ])
 
     # Extract the response content
     extracted_content = response['choices'][0]['message']['content']
@@ -101,19 +103,17 @@ def construct_sparql_query_openai(question: str, matched_entities: list, matched
     print("relation_triples: ", relation_triples)
 
     # Call the OpenAI ChatCompletion API
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are to construct a SPARQL query based on a natural language question and given entities and relations. Convert the question's structure into a SPARQL query format, including the directionality of relationships.  Use full IRIs where possible, and minimize prefixes."
-            },
-            {
-                "role": "user",
-                "content": f"Construct a SPARQL query for the question '{question}' using full IRIs/IDs for entities {entity_urns} and relation triples {relation_triples} which contain context for directionality.  Use full IRIs for entities if possible.  Don't try to filter on liter. Give me only the SPARQL query as an output.",
-            },
-        ],
-    )
+    response = client.chat.completions.create(model="gpt-4",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are to construct a SPARQL query based on a natural language question and given entities and relations. Convert the question's structure into a SPARQL query format, including the directionality of relationships.  Use full IRIs where possible, and minimize prefixes."
+        },
+        {
+            "role": "user",
+            "content": f"Construct a SPARQL query for the question '{question}' using full IRIs/IDs for entities {entity_urns} and relation triples {relation_triples} which contain context for directionality.  Use full IRIs for entities if possible.  Don't try to filter on liter. Give me only the SPARQL query as an output.",
+        },
+    ])
     return response['choices'][0]['message']['content']
 
 

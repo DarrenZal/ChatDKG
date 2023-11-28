@@ -1,8 +1,8 @@
 // This is a simple example of creating a Knowledge Asset from a JSON file on OriginTrail DKG
 
-import "dotenv/config";
-import DKG from "dkg.js";
-import fs from "fs";
+import 'dotenv/config';
+import DKG from 'dkg.js';
+import fs from 'fs';
 import { writeFile } from 'fs/promises';
 
 
@@ -69,30 +69,31 @@ WHERE {
 })();
 */
 
-(async () => {
-  const result = await dkg.graph.query(
-   `
-   PREFIX schema: <http://schema.org/>
+ (async () => {
+  
 
-SELECT DISTINCT ?company
-WHERE {
-  ?company schema:industry "renewable energy" .
-  ?company schema:investor ?investor .
-  ?investor schema:investment <http://example.org/companies/BioGenX> .
-}
+ const result3 = await dkg.graph.query(
+  `
+  PREFIX schema: <http://schema.org/>
 
-   `,
-   'SELECT',
-   );
+  SELECT DISTINCT ?investor
+  WHERE {
+    ?company schema:industry "renewable energy" .
+    ?company schema:foundedYear ?foundedYear .
+    FILTER(xsd:integer(?foundedYear) > 2010)
+    ?company schema:investor ?investor .
+  }
+  `,
+  'SELECT',
+  );
 
- console.log("test query: ", JSON.stringify(result, null, 2));
-
+console.log("query 3: ", JSON.stringify(result3, null, 2));
 })(); 
+ 
 
 
 
-
-// Function to get the asset and write to a file
+ // Function to get the asset and write to a file
 async function getAssetAndWriteToFile(UAL) {
   try {
     const getAssetResult = await dkg.asset.get(UAL);
@@ -108,7 +109,7 @@ async function getAssetAndWriteToFile(UAL) {
   } catch (error) {
     console.error("Error getting asset or writing to file:", error);
   }
-}
+} 
 
 // Yewmakerol
 //getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/937496");
@@ -119,10 +120,11 @@ async function getAssetAndWriteToFile(UAL) {
 //getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/978802"); //other companies
 
 //getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/945055"); //person
-//getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/945101"); //orgs
-//getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/945136");
-
-
+//getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1063694"); //orgs
+//getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1078529");
+//getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1078664");
+//getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1078855");
+//getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1165451");
 
 
 

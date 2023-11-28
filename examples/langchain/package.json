@@ -9,7 +9,8 @@
   "main": "index.js",
   "dependencies": {
     "dkg.js": "^6.0.7",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "nvm": "0.0.4"
   },
   "engines": {
     "node": ">=16"

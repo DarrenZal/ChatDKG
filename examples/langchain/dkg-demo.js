@@ -3,7 +3,7 @@ import DKG from "dkg.js";
 import fs from "fs";
 
 // Parse the JSON data from file
-const jsonData = JSON.parse(fs.readFileSync("../utils/investor_data.json"));
+const jsonData = JSON.parse(fs.readFileSync("../utils/data.json"));
 
 // Initialize the DKG client on OriginTrail DKG Testnet
 const dkg = new DKG({
@@ -18,8 +18,9 @@ const dkg = new DKG({
 // Function to create a Knowledge Asset on OriginTrail DKG
 async function createKnowledgeAsset(data) {
   try {
-    await dkg.asset.increaseAllowance('1969429592284014000');
-    const creationResult = await dkg.asset.create(data, { epochsNum: 3 });
+    await dkg.asset.increaseAllowance('2069429592284014000');
+   // const creationResult = await dkg.asset.burn();
+    const creationResult = await dkg.asset.create(data, { epochsNum: 1 });
     console.log(`Knowledge asset UAL: ${creationResult.UAL}`);
   } catch (error) {
     console.error("Error creating Knowledge Asset:", error);
@@ -29,6 +30,11 @@ async function createKnowledgeAsset(data) {
 // Main function to iterate over sections and create assets
 (async () => {
   for (const section in jsonData) {
+   /*  if (section === "OtherCompanies") {
+      console.log(`Skipping section: ${section}`);
+      continue; // Skip this iteration and proceed to the next section
+    } */
+
     console.log(`Creating Knowledge Asset for section: ${section}`);
     await createKnowledgeAsset(jsonData[section]);
   }

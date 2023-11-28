@@ -53,7 +53,7 @@ upload_to_milvus(
 # Upload relations without duplicates
 upload_to_milvus(
     tsv_file="relations.tsv",
-    text_column="Predicate",  # Column containing text for relations
+    text_column="Embedding",  # Column containing text for relations
     collection_name="RelationCollection",
     embedding_model=embedding_model,
     milvus_connection_args=milvus_connection_args
