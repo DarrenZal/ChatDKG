@@ -35,10 +35,15 @@ npm install
 
 ## Python Dependencies
 
-Then, install Python dependencies:
+create a python virtual environement (optional)
+python -m venv venv
 
 ```bash
-pip install python-dotenv openai langchain pandas
+Then, install Python dependencies:
+```
+
+```bash
+pip install python-dotenv openai langchain pandas sentence-transformers pymilvus dkg
 ```
 ## Environment Variables
 
@@ -104,3 +109,78 @@ This will generate responses based on the uploaded knowledge graph.
 ## Troubleshooting
 
 If you encounter any issues, please check that you've correctly set all environment variables in the .env file and that you have the right versions of NodeJS and Python. If you continue to experience problems, please open an issue in the GitHub repository.
+
+
+## If deploying as a backend server with a seperate front end:
+
+### 1. **Setting Up FastAPI:**
+#### a. Installation:
+
+Install FastAPI and an ASGI server, such as Uvicorn, which will serve your application.
+
+```bash
+pip install fastapi[all] 
+pip install uvicorn
+```
+
+#### b. Basic FastAPI Setup:
+
+Create a new FastAPI application. Here's a simple example to get you started:
+
+```bash
+# app.py
+server {
+    listen 80;
+    
+    server_name yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+make sure port 8000 is open
+```bash
+sudo ufw allow 8000
+```
+
+### 2. **Run Your FastAPI Application:**
+
+Use Uvicorn to run your application:
+
+```bash
+`uvicorn app:app --host 0.0.0.0 --port 8000`
+```
+
+This command will start your FastAPI application on port 8000.
+
+### 4. **Using Nginx as a Reverse Proxy (Optional but Recommended):**
+
+Setting up Nginx in front of FastAPI can improve performance and security:
+
+- Install Nginx on your server.
+- Configure Nginx to act as a reverse proxy to pass requests to FastAPI. Here’s a basic configuration snippet:
+
+```bash
+server {
+    listen 80;
+    
+    server_name yourdomain.com;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+- Replace `yourdomain.com` with your actual domain name.
+- Ensure that Nginx is configured to start automatically.
