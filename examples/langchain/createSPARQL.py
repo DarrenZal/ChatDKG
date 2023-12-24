@@ -8,6 +8,7 @@ from langchain.vectorstores import Milvus
 from dkg import DKG
 from dkg.providers import BlockchainProvider, NodeHTTPProvider
 import re
+from pprint import pprint
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
@@ -97,9 +98,6 @@ def extract_entities_relations(question: str) -> (list, list):
         entities = list(set(entities))
         relations = list(set(relations))
 
-        print('Entities:', entities)
-        print('Relations:', relations)
-
         return entities, relations
 
     except Exception as e:
@@ -111,15 +109,14 @@ def extract_entities_relations(question: str) -> (list, list):
 @timed_function
 def EntityMatchAnswer(question):
  #match quations to entities
-        print("1")
         docs = vector_db_entities.similarity_search(question)
-        print("2")
         all_documents = []
 
-        for doc in docs:
+        # Iterate over only the top 5 documents
+        for doc in docs[:5]:
             document_dict = {
                 'page_content': doc.page_content,
-                'metadata:': {
+                'metadata': {  # Corrected 'metadata:' to 'metadata'
                     **doc.metadata
                 }
             }
@@ -202,15 +199,19 @@ def generate_sparql_query(question):
     # Extract entities and relations
     entities, relations = extract_entities_relations(question)
 
-    print("Extracted Entities: ", entities)
-    print("Extracted Relations: ", relations)
+    print("Extracted Entities: ")
+    pprint(entities)
+    print("Extracted Relations: ")
+    pprint(relations)
 
     # Match the candidate entities and relations using vector similarity
     matched_entities = match_entities(entities, vector_db_entities)
     matched_relations = match_relations(relations, vector_db_relations)
 
-    print("Matched Entities: ", [str(entity) for entity in matched_entities])
-    print("Matched Relations: ", [str(relation) for relation in matched_relations])
+    print("Matched Entities: ")
+    pprint([str(entity) for entity in matched_entities])
+    print("Matched Relations: ")
+    pprint([str(relation) for relation in matched_relations])
 
     # Construct the SPARQL query using OpenAI
     sparql_query = construct_sparql_query_openai(question, matched_entities, matched_relations)

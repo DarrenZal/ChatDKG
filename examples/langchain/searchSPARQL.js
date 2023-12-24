@@ -76,13 +76,10 @@ WHERE {
   `
   PREFIX schema: <http://schema.org/>
 
-  SELECT DISTINCT ?investor
-  WHERE {
-    ?company schema:industry "renewable energy" .
-    ?company schema:foundedYear ?foundedYear .
-    FILTER(xsd:integer(?foundedYear) > 2010)
-    ?company schema:investor ?investor .
-  }
+SELECT ?property ?value
+WHERE {
+  <http://example.org/companies/GreenyInnovation> ?property ?value.
+}
   `,
   'SELECT',
   );
@@ -124,7 +121,7 @@ async function getAssetAndWriteToFile(UAL) {
 //getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1078529");
 //getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1078664");
 //getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1078855");
-//getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1165451");
+//etAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1185202");
 
 
 

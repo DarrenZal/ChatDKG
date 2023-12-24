@@ -3,7 +3,7 @@ import DKG from "dkg.js";
 import fs from "fs";
 
 // Parse the JSON data from file
-const jsonData = JSON.parse(fs.readFileSync("../utils/data.json"));
+const jsonData = JSON.parse(fs.readFileSync("../utils/data2.json"));
 
 // Initialize the DKG client on OriginTrail DKG Testnet
 const dkg = new DKG({

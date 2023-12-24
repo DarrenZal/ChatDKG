@@ -1,7 +1,9 @@
 from fastapi import FastAPI, HTTPException  # Add HTTPException here
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import createSPARQL 
+import RAG_SPARQL 
+import createSPARQL
+from pprint import pprint
 
 app = FastAPI()
 
@@ -17,14 +19,15 @@ app.add_middleware(
 # Define a Pydantic model for the request data
 class QueryRequest(BaseModel):
     question: str
+    history: list[dict[str, str]]  # Add this line
 
-@app.post("/generate_query")
-async def generate_query(query_request: QueryRequest):
+@app.post("/query")
+async def query(query_request: QueryRequest):
     try:
         question = query_request.question
-        sparql_query = createSPARQL.generate_sparql_query(question)
-        print("Generated SPARQL query:", sparql_query)
-        return {"sparql_query": sparql_query}
+        history = query_request.history  # Extract history from the request
+        result = await RAG_SPARQL.RAGandSPARQL(question, history)  # Pass history to the function
+        return {"result": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 @app.post("/EntityMatchAnswer")
@@ -32,8 +35,8 @@ async def EntityMatchAnswer(query_request: QueryRequest):
     try:
         question = query_request.question
         matched_entities, response = createSPARQL.EntityMatchAnswer(question)
-        print("Generated EntityMatches", matched_entities)
-        print("Generated EntityMatchText:", response)
+        print("Generated EntityMatches: ")
+        pprint(matched_entities)
         return {"matched_entities": matched_entities, "response": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

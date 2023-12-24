@@ -1,0 +1,981 @@
+{
+  "operation": {
+    "publicGet": {
+      "operationId": "2526077f-963c-403d-8b3c-07672bc4e432",
+      "status": "COMPLETED"
+    }
+  },
+  "assertion": [
+    {
+      "@id": "_:c14n0",
+      "http://schema.org/name": [
+        {
+          "@value": "Yvo Hunink,sadasan,Laser Ding,Ben Sheppard,Daniel Knez,Cristian Oyan,Leo Lin,Dave Burrells,Mikhail Schemm,Luke Potter,Milena Saroba,Frank Yoon,Ifeanyi Christwin Jr,Nataliya.ai,Soraia Carmo"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n1",
+      "http://schema.org/name": [
+        {
+          "@value": "Feb 24 to Mar 5"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n10",
+      "http://schema.org/name": [
+        {
+          "@value": "BVRio Environmental Exchange Platform,Crypto Climate Accord,Democracy.Earth ,Kleros,Lobby3DAO,Cynsar Foundation,demoVerse,Cosmos for Humanity"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n11",
+      "http://schema.org/name": [
+        {
+          "@value": "The official Asia Crypto Week"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n12",
+      "http://schema.org/name": [
+        {
+          "@value": "SDG Knowledge Hub"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n13",
+      "http://schema.org/name": [
+        {
+          "@value": "SUSTEX - WORLD TECH FOR IMPACT AND CLIMATE ACTION CONFERENCE,ReFi Summit 2023,Hong Kong Web3 Festival 2023  ReFi Session,REFI PARIS BLOCKCHAIN WEEK 2023,ReFi Lisboa  Kick-off ,ReFi Lisboa  Emergence,Launch of ReFiTO,Carbon  web3/ Refi Ecosystem - Blockchain for Social Good Berlin,Cripto Cantina ReFi:  OPEN MIC"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n14",
+      "http://schema.org/name": [
+        {
+          "@value": "Algoranna,Aqua Goat,Astral,Centree.org,Cryptotrunks,Earth Dollar,Earthfund,Ethimals,Green Climate World WGC,Guardians of Earth,Hack4Climate,Moon Jelly.io,Nemus,New Atlantis,Open Forest Protocol,Plastic Bank,Porini Foundation,Rebalance.earth,Return Protocol,Savespecies,Sea Chain,SEEDS,Single.Earth,Sovereign Nature Initiative,Veritree,Wildchain.io,Wren,Purple Penguin ,H20 Securities,Absurd Arboretum,Acre DAO,Aquari,Avano,Beach Collective,Bloomeria,Carbon Collectible NFTs,Climate Clouds,Climate Guardians,Corcovado,Digital MRV,earth.fm,Eco Bears Club ,EcoStake.net,Fabricating Future Forests,Fighters Gang,Mangrove DAO,MetaTrees NFT,NFTree Haus,Public Land Protocol,Rewilder,Saplings,The AEternals,Vlinder Climate,CryptoTreesASA,Fund The Planet,Natural Capital DAO,Spirals Protocol,UCO Network ,Abundance Brasil,Oxygen Chain,BASIN DAO,Wild Sherpas DAO,GainForest,Coral Tribe ,ReCommon,Green Arks Foundation,Green Digital Guardians,PlantGang,Diamante Bridge Collective The DBC,Plasticoin,Phauna,Plasticoin"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n15",
+      "http://schema.org/name": [
+        {
+          "@value": "Rangi Chanya: Regenerating our Earth ReFi-Dar es Salaam,Regenerate  Chill,Ottawa Green Pill,Financing Social and Environmental Impact with Blockchain Technology,Criptocantina: Lanzamiento de CriptOrosi ,Cooperativismo"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n16",
+      "http://schema.org/name": [
+        {
+          "@value": "Phil Fogel,Raphael Haupt,Kennedy Nganga,Al William Rez Tammsaar"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n17",
+      "http://schema.org/name": [
+        {
+          "@value": "Sintrop"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n18",
+      "http://schema.org/name": [
+        {
+          "@value": "February 21"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n19",
+      "http://schema.org/name": [
+        {
+          "@value": "Tanzania ReFi node x Njombe Climate Action"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n2",
+      "http://schema.org/name": [
+        {
+          "@value": "Ecocoin,Gaia Greentech,Green Powerrnpower.io,Greenidge Generation,Traseable,Unchain,Plastiks,Empower,BunkerTrace,Litter Token"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n20",
+      "http://schema.org/name": [
+        {
+          "@value": "SOCAP23 - SOCAP Global SOCAP Global,ReFi Lisboa  Kick-off ,ReFi Lisboa  Emergence,2o Forum Popular de Cultura de Lumiar e Biorregiao,abc,Verano ReFi Costa Rica 2023,InspiReFi,ReFi San Jose en la Criptocantina,Gitcoin Activation Station"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n21",
+      "http://schema.org/name": [
+        {
+          "@value": "VitaDAO,Stepn,Sweat Coin,GenoPets,MetaGym,Dotmoovs,Calo,Olivex,BioTrip ,PsyDAO,BORN,BioFrequency Company,BiO2"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n22",
+      "http://schema.org/name": [
+        {
+          "@value": "North American Carbon World NACW conference,Carbon Forward Conference 2023,14 Measuring Climate Impact: theory  learnings from web3 ReFi projects,Hong Kong Web3 Festival 2023  ReFi Session,REFI PARIS BLOCKCHAIN WEEK 2023,ReFi Lisboa  Kick-off ,ReFi Lisboa  Emergence,Rangi Chanya: Regenerating our Earth Tanzania Local Node"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n23",
+      "http://schema.org/name": [
+        {
+          "@value": "Event: 2023 UN Climate Change Conference UNFCCC COP 28"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n24",
+      "http://schema.org/name": [
+        {
+          "@value": "Clr.fund,DAO Nation,dClimate.net,Emerging Impact,Geoweb,IXO World,Kolektivo,Minerva Wallet,MintGreen,Optimism,piedao,Proof of Humanity,Regen Network,SkillWallet,Umbrel,Upala,Values Index,VeChain,Circular Drive Initiative ,Asic Jungle,Biscoint DollarSave,Paychant,Moola,Leaf ,El Dorado,MugglePay,Symetric,Rare Gems,Valora,Saber,Beefy Finance,Kotani Pay,Cryptio,Kite Financial,Brokoli Network,Anatha,Digital Gaia,Earth Wallet,Ephemeris Protocol review - is this impact centric enough to be included,EverGreenCoin,Guardian,Hyperledger,Impact Oracle,Metaplex,Nano currency XNO,Open Climate Collabthon,Bitgreen,Cardashift,Commons Stack,Topl,RDDL Network,Particula,Simbiotica Finance"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n25",
+      "http://schema.org/name": [
+        {
+          "@value": "Green Pill Festival,REFI PARIS BLOCKCHAIN WEEK 2023,ReFi Lisboa  Kick-off ,ReFi Lisboa  Emergence,ReFI TOKYO,ReFi Spring Harare: ReFi 101,ReFi Spring Kigali: ReFi 101,REFI ON PHANGAN: SHILLING LOCAL PROJECTS FOR GITCOINBETA,The First Ever IRL GreenPill Boston Meetup at ETHBoston 2023,Russian speaking community meetup,ReFi Phangan meet up. Crypto cafe,ReFiTO,Empowering rural communities on climate adaption in the age of web 3,Global Pizza Party 2023,ReFi Cape Town: Kick-off,I Encuentro ReFi Costa Rica,SystAIn3r Hackathon,Aventura ReFi: Desvelando el futuro de ReFi Medellin a traves del juego"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n26",
+      "http://schema.org/name": [
+        {
+          "@value": "John Ellison,Dave Fortson,Luis Carranza Perales ,Brian Truax,Pavel Grachev,Raphael Garcia,Rica Amaral,Joseph Flynn,Tian-Yuan Zhao,Jeanne Bloch,Joaquin Paz Marchese,Charlie Pool,Hello Inkom,Luis Schaubut,oscar.dot,Gerardo alvarez,Emma Nogueira,Doka ,David Elbez,Juan Diego Villacis,Pavlo Luchkovskyi ,Marek Tucek,Sandra Ponce de Leon,Christina Fedor,Ata Tekeli,Ana Wadovski,Luis Cajiao,Owen Langham,Mackenze McAleer,Abhinand,pablo lopez,Vanessa Prevost,Ayakha Mzimkulu,Andrew Crosby,Navin Seeterram,Solarpunk SEED,Erik Ackermann,Armando Schiavo,Ajmal Muhammad,Larissa Talmon-Gros"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n27",
+      "http://schema.org/name": [
+        {
+          "@value": "Climate Collective,Climate Ledger Initiative,Curve Labs,Decent Labs,Next Genvillage,Open Earth Foundation,Radicalxchange,Hut 8 Mining,comgo,Crypto Commons Association,EcoDeath,Patica Learning,ReFi DAO,Blockchain x Climate Leadership Network BxC,Dutch Blockchain Coalition,Metacrisis.xyz,Blockchain for Good France,The Lexicon,DecentrAgora,Economic Space Agency,xParametric"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n28",
+      "http://schema.org/name": [
+        {
+          "@value": "Mybff,Social Alpha Foundation,The Blockchain  Climate Institute ,VoizDAO,Play4Change,ReFi Spring,Floristic,ReFi DAO,dotlabs,GreenPill Global,Regens Unite,SolarPunk Guild,SpiritDAO,ReFi Seoul"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n29",
+      "http://schema.org/name": [
+        {
+          "@value": "ETHDenver BUIDLathon  Festival"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n3",
+      "http://schema.org/name": [
+        {
+          "@value": "Aventura ReFi: Desvelando el futuro de ReFi Medellin a traves del juego"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n30",
+      "http://schema.org/name": [
+        {
+          "@value": "Rod Mamin,Ahsan,Rohit,Natalia Miranda,Lucas Zaehringer,Tyler"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n31",
+      "http://schema.org/name": [
+        {
+          "@value": "Allegory,AngelProtocol,Charitas ,Fold,Forestbase,Impactio,Maker DAO,Seed Club,Social Impact Capital,Treejer ,Y2123,Bloinx,cLabs,ECORISE DAO,ESG Marketplace,HBAR Foundation Sustainable Impact Fund,Mira DAO,Orenverse,Reverse Climate Change  ,Solarpunk Dao,Unf_ck The Planet,WeCould DAO,Impacta Finance,Evercity,BiodiversityDAO,Future Quest,Magic Ventures,ValleyDAO,Gaia Impact,Gaia,Abundance Protocol,Visions Regenerative Fund DAO,Planet Positive Ventures,NEAR ReFI,Impactopia,Routine For Bots"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n32",
+      "http://schema.org/name": [
+        {
+          "@value": "IISD,Climate Week,Hong Kong Web3 Festival 2023  ReFi Session,TG bot  ChatGPT for Air Quality. Knowledge sharing,ReFi Prague at the Prague Blockchain Week"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n33",
+      "http://schema.org/name": [
+        {
+          "@value": "Tomer Bariach,Ed Walters,Kristin McDonald,Joe Gerber,Tim Rann,Ed Dua,Tom OKeefe,Geoff Hamilton,Alex Filotimo,Simar Mangat,Jahed Moman,Matthew Stotts,David Rodriguez,Emma Sokoloff,Porter Smith,Yida Gao,Ikarus Janzen,Henry Harder,Vera Futorjanski,Will Anderson,Kee ,Alex Witt,Balaji,Albert Wegner,Axel Roitzsch,Henrik BR,Poseidon,Marco Canzian,Ben West,Philip Stehlik ,Natalia Isaza Chavarria,Joseph Naayem,Vincent KATCHAVENDA,Viara Ivanova,Luuk Weber,Ronny Castillo,Ash Ley,Aether,Rick Williams,Mike Natanzon,Toby Thompkins,Arturo Montanaro"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n34",
+      "http://schema.org/name": [
+        {
+          "@value": "Argo Blockchain,Bitlumens,Blocklab,Blok-z,Carbon FYI  ,Chia,Deep,Efforce,Electrify Asia,Electron ,Energy Web  ,Energy-Blockchain Labs and IBM,FlexiDao  ,Fohat,Fredenergy.org,Freelio,Frisia Cooperativa Agroindustrial,Green Sea,Greeneum,Grid Singularity,Iris Energy,Meltek,NRGCoin,PowerLedger,Pylon Network PYLNT,Rowan Energy,Solar Coin,Spectral,Suncontract,Sustainable Bitcoin Standard,The Energy Origin,The Sun Exchange,Venus Energy.io,1931.io,ENREX,Grayblock Power,Spark Eco,Star One,Wattz,XELS,XRP Green Currency Tool,Tesseract ,RiddleCode,Switch Electric Ltd"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n35",
+      "http://schema.org/name": [
+        {
+          "@value": "ReFi Lisboa  Green Pill Lisbon,ReFi a Paris - Monthly meetup,CriptoCantina Tematica: Finanzas Regenerativas y ReFi San Jose,African Regenerative Cities  Futures  FreeFlow Eden Zanzibar July 20-23,Public Goods funding using trustless web applications"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n36",
+      "http://schema.org/name": [
+        {
+          "@value": "2local.io,ACRE DAOs ,AIDtech,Bounties.network,Bright ID,cabin,Celo,Citizendao,CityDAO,Co2bit,Doni,Frothy DAO,Give Crypto,Giveth,Good Dollar.org,LOA Labs,MOEDA,PathDAO,Redd-Chain,Seatle NFT Museum,she256,Socialstack,The Eden DAO,The Givin Block,UnBlocked Cash project UBC,Unions ,WOW Surf,GoodGhostin,ReSource,Santym,Ribon,DeFi for the People,The Spjere,WeTrust,Thrivecoin,All for Climate DAO,Art That Keeps On Giving,Blockchain Biodiversity FounDAtiOn - BBDAO,Closer ,Digital Charity Art,EcoDAO,Grassroots Economics,HOME DAO,Movement DAO,PopcornDAO,Seeds Regenerative Cryptocurrency ,taamana,The Hero Loop,The Urban Acupuncture Fund,W3ST DAO,WebTree Warriors,Tigray Art Collective,ReFi Zambia,Kornerz,Black DAO,The Space,Quantum Temple,The Block Explorer,Studio Krya,Forum Popular de Cultura de Lumiar e Biorregiao,Cambiatus,Inkom,ReFi Phangan,impactMarket,NFT uy ,Mundo NFT,Ruta de Impacto,No Impunity,C0MM0NSIA"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n37",
+      "http://schema.org/name": [
+        {
+          "@value": "ReFi Day"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n38",
+      "http://schema.org/name": [
+        {
+          "@value": "Regens Unite Gathering"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n39",
+      "http://schema.org/name": [
+        {
+          "@value": "Protopian Convergence Costa Rica"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n4",
+      "http://schema.org/name": [
+        {
+          "@value": "Rebalance Earth - Natural Capital"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n40",
+      "http://schema.org/name": [
+        {
+          "@value": "Gerard Hoornweg,Beeradley,Nicolas Pieroni"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n5",
+      "http://schema.org/name": [
+        {
+          "@value": "Aerial.is,AERTH,DAO IPCI,BlockC,Blockchain for Climate Foundation,Blocklapse,Carbonswap.exchange,CarbonX,Cascadia Carbon,Changeblock,Climate Chain Coalition,Climatefutures.io,Cut,Digital Art4 Climate,Dovu,Earth,FlowCarbon,Global Innovation Lab for Climate Finance the Lab,Inuk,KlimaDAO ,MOSS,Nori,Ocean drop,Offset Farm,Offsetera ,Partnerships for Forests P4F,RECDeFi,Save Planet Earth,Solid World  ,Toucan Protocol,Treedefi.com,UniversalCarbon,Uphold,Crypto Carbon Ratings Institute,Thallo,Ivy Protocol,Cool Points Club,Meta Carbon ,1Planet,AlliedOffsets,Atem,Cambridge Center for Carbon Credits 4C,carb0n.fi,Carbon Captors,Carbon Paws,Carbon Utility Token CUT,Carbonbase,CarbonDAO,Carbonized.xyz,Carbonland DAO,Carbonwallet,Climate Impact X,ClimateDAO,Creol,CyberBox ReFi NFT Marketplace,DrawDAO,Ducky,Earthbanc,EcoSapiens,GreenTrade ,GruenDAO,Helios DAO,Impact Ledger,ImpactScope,Katalyst.Earth,Kenza.DAO,MarinaChain,Meridian DLT,Mycorr,Patch,Project Ark,ReSeed,SENKEN,Verity tracking Europe,Zero Carbon Sustainability Chain,Greneer,ERC-Cool,OFFSET dApp,Sustaim,Carbon Credit Technology CCT,Operal AG,Sunrise Stake,ecoToken,Carbonable,PLENO,Arquitectura Regenerativa"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n6",
+      "http://schema.org/name": [
+        {
+          "@value": "0xOrphan,MAL,nikola georgiev,Stephen Allen,Niklas Anzinger,Ahmed Hussain"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Person"
+      ]
+    },
+    {
+      "@id": "_:c14n7",
+      "http://schema.org/name": [
+        {
+          "@value": "Trellis"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "_:c14n8",
+      "http://schema.org/name": [
+        {
+          "@value": "Agrotoken,Big Green DAO,Bitnoa,FishCoin,Fransine.com,HARA,EthicHub,Kokonut Network,Shamba,Sustainable Impact Token SIT"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Organization"
+      ]
+    },
+    {
+      "@id": "_:c14n9",
+      "http://schema.org/name": [
+        {
+          "@value": "Hong Kong Web3 Festival 2023  ReFi Session,Gitcoin Activation Station"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:event:HongKongWeb3Festival2023-ReFiSession",
+      "http://schema.org/name": [
+        {
+          "@value": "Hong Kong Web3 Festival 2023  ReFi Session"
+        }
+      ],
+      "@type": [
+        "http://schema.org/Event"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:-Energy",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n0"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "Supporting the transition to renewable and sustainable energy sources, reducing carbon emissions and promoting energy efficiency for a cleaner and more resilient future. This Positive Impact Area encompasses projects that aim to increase access to clean energy, improve energy storage technology, promote energy conservation, and encourage the adoption of sustainable energy practices across different sectors of the economy. By advancing the transition to sustainable energy, these projects contribute to mitigating climate change, reducing air pollution, and enhancing energy security while creating economic opportunities and improving the quality of life for communities."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "https://example.com/urn:event:HongKongWeb3Festival2023-ReFiSession"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting the transition to sustainable energy sources and promoting energy efficiency "
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Energy"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n34"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:-Industry",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n30"
+        },
+        {
+          "@id": "_:c14n6"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "Supporting sustainable and circular practices in industry to reduce environmental impact and promote social and economic development. This Positive Impact Area includes projects that aim to improve resource efficiency, reduce waste and pollution, and foster sustainable supply chains. By promoting sustainable practices in industry, these projects contribute to mitigating climate change, protecting natural resources, enhancing social and economic resilience, and improving the health and well-being of communities. They also create new business opportunities and improve the competitiveness and reputation of companies that adopt sustainable and circular practices."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n12"
+        },
+        {
+          "@id": "_:c14n23"
+        },
+        {
+          "@id": "_:c14n32"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting sustainable and circular practices in industry to reduce environmental impact and promote social and economic development."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Industry"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n2"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:-Innovation",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n26"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "Supporting the development of innovative solutions and technologies that address social, economic, and environmental challenges and promote sustainable and equitable development. This Positive Impact Area includes projects that aim to foster entrepreneurship, promote research and development, and accelerate the adoption of new technologies and processes that contribute to sustainable development. By promoting innovation, these projects contribute to enhancing social and economic opportunities, improving resource efficiency, reducing environmental impact, and promoting social inclusion and equity. They also promote the creation of new markets and industries and contribute to the development of a knowledge-based economy."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n13"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting the development of innovative solutions and technologies that address social, economic, and environmental challenges and promote sustainable and equitable development."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Innovation"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n27"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:-Politics--Activism",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n19"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "This Positive Impact Area includes projects that aim to strengthen democratic institutions, promote transparency and accountability, protect human rights, and foster social and environmental justice. By promoting politics and activism, these projects contribute to enhancing democratic participation and representation, reducing social and economic inequality, and promoting environmental sustainability. They also promote the empowerment of marginalized communities and the protection of vulnerable populations, and help create a more just and equitable society."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n39"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting democratic governance, human rights, social justice, and civic engagement."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Politics  Activism"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n10"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:Carbon",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n16"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "This Positive Impact Area includes projects that aim to promote carbon reduction, offsets, and credits. These projects contribute to enhancing environmental sustainability, reducing greenhouse gas emissions, and promoting social and economic opportunities in sustainable sectors. They also help to promote global cooperation and leadership in addressing the global challenge of climate change, and contribute to the development of a more sustainable and resilient global society."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n22"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting decarbonization across the economy and natural world."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Carbon"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n5"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:Digital-Infrastructure",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n11"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "Supporting the development of accessible, secure, and sustainable digital infrastructure to promote innovation, connectivity, and social and economic development. This Positive Impact Area includes projects that aim to improve access to digital technologies, promote digital literacy and skills, enhance data privacy and security, and foster the development of sustainable and resilient digital systems. By promoting the development of digital infrastructure, these projects contribute to enhancing social and economic opportunities, improving communication and collaboration, and promoting environmental sustainability. They also promote social inclusion and equity by improving access to digital resources and services for underserved communities."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n1"
+        },
+        {
+          "@id": "_:c14n29"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting the development of accessible, secure, and sustainable digital infrastructure to promote innovation, connectivity, and social and economic development."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Digital Infrastructure"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n24"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:Education",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n37"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "This Positive Impact Area includes projects that aim to integrate sustainability into education at all levels, promote experiential and interdisciplinary learning, and develop innovative educational resources and tools. By promoting sustainability education, these projects contribute to enhancing knowledge and understanding of sustainability challenges, promoting behavior change towards more sustainable lifestyles, and developing a new generation of leaders and innovators who can contribute to a more sustainable future. They also help to build capacity and resilience in communities and promote the adoption of sustainable practices in all sectors of society."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n25"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting education and awareness about sustainability & regeneration and helping to foster the development of key skills and competencies."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Education"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n28"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:Food--Agriculture",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n17"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "Supporting sustainable and regenerative practices in food production and agriculture to promote food security, biodiversity, and community well-being. This Positive Impact Area includes projects that aim to reduce the environmental impact of agriculture, increase the resilience of food systems, promote sustainable land use practices, and support the livelihoods of farmers and rural communities. By promoting sustainable and regenerative practices in food and agriculture, these projects contribute to mitigating climate change, conserving natural resources, enhancing biodiversity, improving soil health, and promoting healthy and equitable food systems. They also create new economic opportunities and foster social and cultural resilience in communities."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n7"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting sustainable and regenerative practices in food production and agriculture."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Food  Agriculture"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n8"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:Fundraising--Investment",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n33"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "This Positive Impact Area includes projects that aim to promote sustainable finance, such as green bonds and impact investing, as well as initiatives that aim to promote corporate social responsibility and sustainable business practices. By promoting sustainability fundraising and investment, these projects contribute to enhancing the flow of capital towards sustainable development, promoting the adoption of sustainable practices by businesses and organizations, and fostering innovation and entrepreneurship in sustainable sectors. They also help to promote social and environmental responsibility and accountability, and contribute to the development of a more sustainable and equitable global economy."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n35"
+        },
+        {
+          "@id": "_:c14n9"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": " Supporting the allocation of capital towards regenerative projects and initiatives."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Fundraising  Investment"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n31"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:Health",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n40"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "Supporting the physical, mental, and social well-being of individuals and communities. This Positive Impact Area includes projects that aim to improve access to healthcare services, promote healthy lifestyles, prevent and control diseases, and address social determinants of health such as poverty, education, and environmental factors. By promoting health and well-being, these projects contribute to enhancing the quality of life, reducing healthcare costs, and improving social and economic productivity. They also promote social equity and inclusion by addressing health disparities and promoting community participation and empowerment."
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting the physical, mental, and social well-being of individuals and communities."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Health"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n21"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:Nature",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n38"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "Projects that aim to protect, conserve, and restore the natural environment, including ecosystems, biodiversity, and natural resources. This Positive Impact Area includes projects that aim to promote sustainable land use, protect endangered species and habitats, restore degraded ecosystems, and promote sustainable forestry and fisheries. By promoting the protection and restoration of nature, these projects contribute to enhancing ecological sustainability, supporting human well-being, and mitigating the impacts of climate change. They also help to promote the conservation of cultural heritage and traditional knowledge, and contribute to the development of a more sustainable and resilient global society."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n18"
+        },
+        {
+          "@id": "_:c14n4"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting the abundance and quality of nature & natural capital."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Nature"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n14"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    },
+    {
+      "@id": "https://example.com/urn:impactArea:Social",
+      "http://schema.org/associatedPersons": [
+        {
+          "@id": "_:c14n3"
+        }
+      ],
+      "http://schema.org/description": [
+        {
+          "@value": "This Positive Impact Area includes projects that aim to provide access to basic needs such as housing, healthcare, and education, promote gender and racial equality, and support marginalized and vulnerable communities. By promoting social justice and equity, these projects contribute to enhancing the well-being and dignity of individuals and communities, reducing social and economic disparities, and promoting social cohesion and peace. They also help to create a more inclusive and equitable society by promoting diversity, acceptance, and mutual respect."
+        }
+      ],
+      "http://schema.org/event": [
+        {
+          "@id": "_:c14n15"
+        },
+        {
+          "@id": "_:c14n20"
+        }
+      ],
+      "http://schema.org/headline": [
+        {
+          "@value": "Supporting social justice, equity, and inclusion, and addressing social issues such as poverty, discrimination, and inequality."
+        }
+      ],
+      "http://schema.org/image": [
+        {
+          "@id": "https://v5.airtableusercontent.com/v1/21/21/1695693600000/AZVM70UMY-pHsoX4nT2ydw/SbvzuRq-kceud6CPPsouJsKlkfEWuj896ptTicOrGHjYT1SXkApJUlZowokH0yzJ7ST8b_QQPXAWl80v3Zggi6-hsxqkqjmL0PXqsIBeIg0/jmNu84RtcAJUr9GNh3fxPqH6tOaPlxRzNUmybM93ajY"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Social"
+        }
+      ],
+      "http://schema.org/organizations": [
+        {
+          "@id": "_:c14n36"
+        }
+      ],
+      "@type": [
+        "http://schema.org/ImpactArea"
+      ]
+    }
+  ],
+  "assertionId": "0x32baada014338b3cdf0a236b4458aaf5883f6c485e52a51edd61bbd057a23b1a"
+}

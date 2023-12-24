@@ -21,3 +21,4 @@ examples/langchain/relations.tsv
 examples/langchain/entities.tsv
 examples/langchain/generate-tsv-ERL.js
 examples/langchain/searchcopy.py
+examples/langchain/spacy-llm

@@ -1,0 +1,10 @@
+{
+  "OtherCompanies": [
+    {
+      "@context": "http://schema.org/",
+      "@type": "Other",
+      "@id": "http://example.org/companies/GreenyInnovation",
+      "foundedYear": 2004
+    }
+  ]
+}
