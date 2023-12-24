@@ -16,7 +16,7 @@ const rdfsRange = namedNode('http://www.w3.org/2000/01/rdf-schema#range');
 
 const store = new n3.Store();
 
-const ontologyData = fs.readFileSync('ontology.ttl', 'utf-8');
+const ontologyData = fs.readFileSync('../Ontology/ontology.ttl', 'utf-8');
 
 function getLocalName(iri) {
     return iri.split(/[#\/]/).pop();

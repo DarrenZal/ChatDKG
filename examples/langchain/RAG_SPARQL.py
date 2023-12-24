@@ -228,7 +228,7 @@ def RAG(question, matches, additional_matches, history):
 
 @timed_function
 async def RAGandSPARQL(question, history):
-    ontology_file_path = "ontology.ttl"
+    ontology_file_path = "Ontology/ontology.ttl"
     ontology_content = read_ontology_file(ontology_file_path)
     
     # Create a thread pool executor
@@ -311,7 +311,7 @@ if __name__ == "__main__":
     question = sys.argv[1]
 
     # Correctly running the async function
-    result = asyncio.run(RAGandSPARQL(question))
+    result = asyncio.run(RAGandSPARQL(question, ''))
 
     print("result: ")
     print(result)

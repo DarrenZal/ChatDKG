@@ -74,7 +74,7 @@ async function analyzeOntologyWithGPT4(ontology) {
     }
 }
 
-const ontology = fs.readFileSync("ontology.ttl").toString();
+const ontology = fs.readFileSync("../Ontology/ontology.ttl").toString();
 
 // Run the analysis
 analyzeOntologyWithGPT4(ontology)
