@@ -1,10 +1,10 @@
 {
   "http://schema.org/MediaObject": {
     "NER": [
-      "http://schema.org/name"
+      "http://schema.org/name",
+      "http://schema.org/description"
     ],
     "RAG": [
-      "http://schema.org/description",
       "http://schema.org/creator",
       "http://schema.org/datepublished"
     ]
@@ -35,14 +35,14 @@
   },
   "http://schema.org/Organization": {
     "NER": [
-      "http://schema.org/name"
+      "http://schema.org/name",
+      "http://schema.org/description",
+      "http://schema.org/areaServed"
     ],
     "RAG": [
-      "http://schema.org/description",
       "http://schema.org/additionalType",
       "http://schema.org/employee",
       "http://schema.org/founder",
-      "http://schema.org/areaServed",
       "http://schema.org/funder",
       "http://schema.org/url",
       "http://schema.org/accountablePerson",
@@ -88,10 +88,10 @@
   },
   "http://schema.org/Place": {
     "NER": [
-      "http://schema.org/name"
+      "http://schema.org/name",
+      "http://schema.org/description"
     ],
     "RAG": [
-      "http://schema.org/description",
       "http://schema.org/isPartOf",
       "http://schema.org/address"
     ]
@@ -106,10 +106,10 @@
   },
   "http://schema.org/Person": {
     "NER": [
-      "http://schema.org/name"
+      "http://schema.org/name",
+      "http://schema.org/description"
     ],
     "RAG": [
-      "http://schema.org/description",
       "http://schema.org/jobTitle",
       "http://schema.org/publicprofilechecked",
       "http://schema.org/sameAs",
@@ -126,10 +126,10 @@
   },
   "http://schema.org/Event": {
     "NER": [
-      "http://schema.org/name"
+      "http://schema.org/name",
+      "http://schema.org/description"
     ],
     "RAG": [
-      "http://schema.org/description",
       "http://schema.org/image",
       "http://schema.org/memberOf",
       "http://schema.org/sponsor",
@@ -151,10 +151,10 @@
   },
   "http://schema.org/ImpactArea": {
     "NER": [
-      "http://schema.org/name"
+      "http://schema.org/name",
+      "http://schema.org/description"
     ],
     "RAG": [
-      "http://schema.org/description",
       "http://schema.org/headline",
       "http://schema.org/image",
       "http://schema.org/LocalCommunity",

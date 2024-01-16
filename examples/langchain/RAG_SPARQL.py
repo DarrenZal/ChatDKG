@@ -2,17 +2,15 @@ import time
 start_time = time.time()
 import os
 import json
-from openai import OpenAI
-from dotenv import load_dotenv
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import Milvus
-from dkg import DKG
-from dkg.providers import BlockchainProvider, NodeHTTPProvider
-import re
-from pprint import pprint
-from pymilvus import MilvusClient
 import asyncio
 import concurrent.futures
+from openai import OpenAI
+from dotenv import load_dotenv
+from sentence_transformers import SentenceTransformer
+from pymilvus import MilvusClient
+from pprint import pprint
+from dkg import DKG
+from dkg.providers import BlockchainProvider, NodeHTTPProvider
 print(f"importing libraries took {time.time() - start_time:.2f} seconds.")
 start_time = time.time()
 
@@ -29,9 +27,18 @@ def timed_function(func):
         return result
     return wrapper
 
-embedding_model = "multi-qa-MiniLM-L6-cos-v1"
+# Milvus Client Initialization
+CLUSTER_ENDPOINT = os.getenv("MILVUS_URI")
+TOKEN = os.getenv("MILVUS_TOKEN")
+milvus_client = MilvusClient(uri=CLUSTER_ENDPOINT, token=TOKEN)
 
-embedding_function = HuggingFaceEmbeddings(model_name=embedding_model)
+# Initialize the Sentence Transformer model
+MODEL_NAME = 'sentence-transformers/multi-qa-MiniLM-L6-cos-v1'
+sentence_model = SentenceTransformer(MODEL_NAME)
+
+# Function to convert a list of strings to embeddings
+def convert_to_embeddings(strings):
+    return sentence_model.encode(strings, convert_to_tensor=True).numpy().tolist()
 
 @timed_function
 def prepend_ontology_prefixes(query, ontology_content):
@@ -67,104 +74,158 @@ def read_ontology_file(file_path):
         content = file.read()
     return content
 
-# Initializing VectorDB connection which was pre-populated with Knowledge Asset vector embeddings
-vector_db_entities = Milvus(
-    collection_name="EntityCollection",
-    embedding_function=HuggingFaceEmbeddings(model_name="multi-qa-MiniLM-L6-cos-v1"),
-    connection_args={
-            "uri": os.getenv("MILVUS_URI"),
-            "token": os.getenv("MILVUS_TOKEN"),
-            "secure": True,
-        },
-)
 
-vector_db_relations = Milvus(
-    collection_name="RelationCollection",
-    embedding_function=HuggingFaceEmbeddings(model_name="multi-qa-MiniLM-L6-cos-v1"),
-    connection_args={
-            "uri": os.getenv("MILVUS_URI"),
-            "token": os.getenv("MILVUS_TOKEN"),
-            "secure": True,
-        },
-)
+def execute_sparql_query(query):
+    try:
+        # Initialize DKG
+        ot_node_hostname = os.getenv("OT_NODE_HOSTNAME") + ":8900"
+        node_provider = NodeHTTPProvider(ot_node_hostname)
+        blockchain_provider = BlockchainProvider(
+            os.getenv("RPC_ENDPOINT"), 
+            os.getenv("WALLET_PRIVATE_KEY")
+        )
+
+        # Initialize the DKG client
+        dkg = DKG(node_provider, blockchain_provider)
+
+        # Execute the query
+        query_graph_result = dkg.graph.query(query, repository="privateCurrent")
+        print("query_graph_result: ", query_graph_result)
+
+        if query_graph_result:
+            return query_graph_result
+        else:
+            return []
+
+    except Exception as e:
+        print(f"Error during SPARQL query execution: {e}")
+        return []
+    
+
+async def generate_RAG_response(question, initial_matches):
+    try:
+        # Format initial_matches for API call
+        formatted_matches = ', '.join([f"'{match}'" for match in initial_matches])
+
+        # Call the OpenAI ChatCompletion API
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo-1106",
+            temperature=0.1,  # Adjust as needed
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an AI assisting with prompts about Regenerative Finance (ReFi). Generate a response based on the given question and use your own knowledge and any relevant data found in the included RAG Search Results. Ignore any of the Search Results that are irrelevant to the prompt. Format the response with HTML line breaks (<br>) for use in HTML."
+                },
+                {
+                    "role": "user",
+                    "content": f"Prompt: '{question}', Search Results: {formatted_matches}"
+                }
+            ]
+        )
+
+        # Extract the text response and replace '\n' with '<br>'
+        response = completion.choices[0].message.content.replace("\n", "<br>")
+
+        completion_tokens = completion.usage.completion_tokens
+        prompt_tokens = completion.usage.prompt_tokens
+        total_tokens = completion.usage.total_tokens
+        OpenAICallCost = 0.001*prompt_tokens/1000 + 0.002*completion_tokens/1000
+        print(f"generate_RAG_response.  input tokens: {prompt_tokens}, output tokens: {completion_tokens}, cost: {OpenAICallCost}")
+
+        return response
+
+    except Exception as e:
+        print(f"Error during LLM response generation: {e}")
+        return "Sorry, I encountered an error while processing your request."
+
 
 @timed_function
-def extract_entities_and_classify(question: str, ontology_content, history) -> (list, str, str):
+def extract_entities_and_classify(question: str, query_matches, ontology_content, history) -> (str, str):
     try:
+        # Format the query matches for the prompt
+        formatted_matches = ", ".join([f"Query Match: {match}" for match in query_matches])
+
         # Call the OpenAI ChatCompletion API
         completion = client.chat.completions.create(
             model="gpt-4-1106-preview",
-            temperature=0.0,
+            temperature=0.1,
             response_format={"type": "json_object"},
             messages=[
                 {
                     "role": "system",
                     "content": (
-                    "This system is for a ReFi chatbot. ReFi stands for Regenerative Finance, "
-                    "an ecosystem in web3. You will receive a natural language prompt. Extract relevant "
-                    "entities with attributes, and classify the prompt as 'SPARQL' or 'RAG'. 'SPARQL' "
-                    "means the prompt should be answered via a SPARQL query using the provided OWL ontology.  Only use subject and object types in accordance with the domain and range of objectProperties / link types. "
-                    "'RAG' means the prompt is better answered by retrieval augmented generation. For all "
-                    "SPARQL queries, regardless of user phrasing, the returned query must aggregate total "
-                    "values before applying filters, and include details such as  "
-                    "IDs for clarity and data provenance. Use subqueries if necessary. "
-                    "Responses must be formatted as JSON. Here is an example:: 'How many organizations "
-                    "have received more than $1000 in funding?' should be answered as '{\"Classification\": "
-                    "\"SPARQL\", \"SPARQL\": \"SELECT ?organization (SUM(xsd:decimal(?amount)) AS "
-                    "?totalFunding) WHERE { ?organization a schema:Organization . "
-                    " ?investment a schema:InvestmentOrGrant . ?investment schema:investee "
-                    "?organization . ?investment schema:amount ?amount . } GROUP BY ?organization "
-                    "HAVING (SUM(xsd:decimal(?amount)) > 1000)\"}'. Example for RAG: 'Who is James Nash?' should "
-                    "be classified and answered with an empty SPARQL as '{\"Classification\": \"RAG\", \"SPARQL\": \"\"}'."
+                        "This system is for a ReFi chatbot focused on Regenerative Finance in web3. "
+                        "Upon receiving a natural language prompt, classify it as 'SPARQL' or 'RAG'. "
+                        "'SPARQL' prompts should be answered with a SPARQL query using a provided OWL ontology, respecting objectProperties' domain and range. "
+                        "'RAG' prompts are better suited for retrieval augmented generation. "
+                        "For RAG queries, if relevant, provide a 'Response' object for user display. "
+                        "If SPARQL is relevant for a RAG query, especially when RAGdata (similarity search results) contains useful entity information, construct a SPARQL query utilizing this data. "
+                        "For SPARQL queries, ensure aggregation of total values before applying filters, and include details like IDs or names for clarity. "
+                        "Consider the inlcuded SPARQL query matches from the database when creating the query. "
+                        "Responses must be in JSON format. Example: "
+                        "For 'How many organizations received over $1000 in funding?', return '{\"Classification\": \"SPARQL\", \"SPARQL\": \"SELECT ?organization (SUM(?amount) AS ?totalFunding) WHERE { ?organization a schema:Organization. ?investment schema:investee ?organization. ?investment schema:amount ?amount. } GROUP BY ?organization HAVING (SUM(?amount) > 1000)\", \"Response\": {\"Text\": \"Relevant response\"}}'. "
+                        "For RAG: 'Who is Monty Merlin?' with RAGdata containing Monty Merlin's ID, use the ID to build an accurate SPARQL query."
                     )
                 },
                 {
                     "role": "user",
-                    "content": f"prompt: '{question}', Ontology: '{ontology_content}'"
+                    "content": f"prompt: '{question}', Query Matches: '{formatted_matches}', Ontology: '{ontology_content}'"
                 },
-                *history # Include chat history in the API call
+                *history  # Include chat history in the API call
             ]
         )
 
         # Extract the response content
         extracted_content = completion.choices[0].message.content
         data = json.loads(extracted_content)
-        print((data))
+        print("Response data")
+        print(data)
 
-        # Process entities
-        """ for entity_name, attributes in data["Entities"].items():
-            entity_str = f"{entity_name}: "
-            for attr, value in attributes.items():
-                entity_str += f"{attr}:{value}; "
-            entities.append(entity_str.rstrip('; '))  # Remove trailing semicolon
-
-        entities = list(set(entities)) """
-        classification = data["Classification"]
+        # Extract additional information from the response
+        classification = data.get("Classification", "Error")
         query = data.get("SPARQL", '')
+
+        # Handle missing Classification key
+        if classification == "Error":
+            print("Classification key missing in response")
+            return 'Error', ''
+
+        # Log token usage for cost estimation
+        completion_tokens = completion.usage.completion_tokens
+        prompt_tokens = completion.usage.prompt_tokens
+        OpenAICallCost = 0.01*prompt_tokens/1000 + 0.03*completion_tokens/1000
+        print(f"extract_entities_and_classify.  input tokens: {prompt_tokens}, output tokens: {completion_tokens}, cost: {OpenAICallCost}")
 
         return classification, query
 
     except Exception as e:
-            print(f"Error occurred: {e}")
-            return [], []  # Return empty lists if an error occurs
+        print(f"Error occurred: {e}")
+        return 'Error', ''  # Return default values if an error occurs
+
 
 @timed_function
-def similaritySearch(question, vector_db):
-    client = MilvusClient(
-        uri= os.getenv("MILVUS_URI"),
-        token= os.getenv("MILVUS_TOKEN") 
-    )
-    """ res = client.query(
-        collection_name="EntityCollection",
-        filter='(EntityID == "https://example.com/urn:content:BlockchainforScalingClimateActionWorldEconomicForumWEF")',
-        output_fields=["EntityID", "text", "RAG"]
-    )
+def similarity_search(question, milvus_client, collection_name):
+    # Convert question to embedding
+    query_embedding = convert_to_embeddings([question])[0]
 
-    print(res) """
+    # Define output fields based on the collection
+    output_fields = ["EntityID", "RAG", "UAL"] if collection_name == "EntityCollection" else ["combined"]
 
-    matches = vector_db.similarity_search(question)
-    if matches:  # Check if there is at least one match
-        return matches[:5] # Append only the top 10 results
+    # Perform search for the query embedding
+    try:
+        search_params = {"metric_type": "L2", "params": {"nprobe": 10}}
+        res = milvus_client.search(
+            collection_name=collection_name,
+            data=[query_embedding],
+            output_fields=output_fields,
+            limit=5,
+            search_params=search_params
+        )
+        # Adjust the following line based on the actual format of res
+        return [hit.entity if hasattr(hit, 'entity') else hit for hit in res[0]]
+    except Exception as e:
+        print(f"Error during Milvus similarity search: {e}")
+        return []
 
 @timed_function
 def modify_query_with_entities(query: str, entity_search_results, ontology_content) -> str:
@@ -199,35 +260,21 @@ def modify_query_with_entities(query: str, entity_search_results, ontology_conte
         print(f"Error occurred: {e}")
         return ''  # Return empty string if an error occurs
 
-@timed_function
-def RAG(question, matches, additional_matches, history):
-    # Format the matches for sending to OpenAI's API
-    formatted_matches = ', '.join([f"'{match}'" for match in matches])
-
-    try:
-        # Call the OpenAI ChatCompletion API with the question and matches
-        response = client.chat.completions.create(
-            model="gpt-4-1106-preview",
-            temperature=0.7,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "Generate a response for a chatbot based on the prompt, the provided semantic search results for the prompt and entities exrtacted from the prompt, and your own knowledge. Provide just the response."
-                },
-                {
-                    "role": "user",
-                    "content": f"Question: '{question}'. Question Matches: {formatted_matches}. Entity Matches: {additional_matches}"
-                },
-                *history # Include chat history in the API call
-            ]
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print(f"Error during OpenAI API call: {e}")
-        return "Error generating RAG response."
+def format_query_result(query_results):
+    """
+    Returns a formatted string representation of a list of query results.
+    Each item in the list is a dictionary.
+    """
+    formatted_results = ""
+    for item in query_results:
+        formatted_item = ', '.join(f"{key}: {value}" for key, value in item.items())
+        formatted_results += "<br>" + formatted_item
+    return formatted_results
 
 @timed_function
 async def RAGandSPARQL(question, history):
+    pprint("history")
+    pprint(history)
     ontology_file_path = "Ontology/ontology.ttl"
     ontology_content = read_ontology_file(ontology_file_path)
     
@@ -237,73 +284,60 @@ async def RAGandSPARQL(question, history):
     # Get the current event loop
     loop = asyncio.get_event_loop()
 
-    # Run extract_entities_and_classify and similaritySearch in the executor
-    extract_task = loop.run_in_executor(executor, extract_entities_and_classify, question, ontology_content, history)
-    semantic_search_task = loop.run_in_executor(executor, similaritySearch, question, vector_db_entities)
+    # First, run similarity search on EntityCollection
+    initial_matches_task = loop.run_in_executor(executor, similarity_search, question, milvus_client, "EntityCollection")
+    
+    # Also, run similarity search on QueryCollection
+    query_search_results_task = loop.run_in_executor(executor, similarity_search, question, milvus_client, "QueryCollection")
+    
+    # Wait for both similarity searches to complete
+    initial_matches, query_search_results = await asyncio.gather(initial_matches_task, query_search_results_task)
+    print("initial_matches: ")
+    pprint(initial_matches)
 
-    classification, query = await extract_task
-    initial_matches = await semantic_search_task
 
-    """ print("Extracted Entities: ")
-    pprint(entities) """
+    print("top_queries: ")
+    pprint(query_search_results)
+
+    # Run extract_entities_and_classify with top query search results
+    extract_task = loop.run_in_executor(executor, extract_entities_and_classify, question, query_search_results, ontology_content, history)
+    
+    # Continue with the existing RAG response using the EntityCollection
+    rag_task = generate_RAG_response(question, initial_matches)  # Assuming this is an async function
+    results = await asyncio.gather(extract_task, rag_task)
+
+    # Unpack the results
+    classification, query = results[0]
+    rag_response = results[1]
+
     print("Classification: ")
     pprint(classification)
 
+
+    final_response = {"Text": "An error occurred."}
     if classification == "SPARQL":
-
-        # Amend the query with necessary prefixes from the ontology
         query = prepend_ontology_prefixes(query, ontology_content)
+        try:
+            sparql_results = execute_sparql_query(query)
+            print("SPARQL results:", sparql_results)  # Debugging log
 
-        # Handle entity resolution and query modification if entities are returned
-        """ if entities:
-            # Run similaritySearch for each entity in the executor and await the results
-            entity_search_tasks = [loop.run_in_executor(executor, similaritySearch, entity, vector_db_entities) for entity in entities]
-            entity_search_results = await asyncio.gather(*entity_search_tasks)
+            if sparql_results:
+                formatted_results = format_query_result(sparql_results)
+                print("Formatted SPARQL results:", formatted_results)  # Debugging log
+                final_response = {"Text": rag_response + "<br>" + "\nSPARQL Results:\n" + formatted_results}
+            else:
+                final_response = {"Text": rag_response}
 
-            # Modify the query with entity_search_results if necessary
-            query = modify_query_with_entities(query, entity_search_results, ontology_content) """
+        except Exception as e:
+            print("Error processing SPARQL response:", e)  # Error log
+            final_response = {"Text": "An error occurred processing the SPARQL response."}
 
-        """ print("SPARQL query: ")
-        pprint(query) """
+    elif classification == "RAG":
+        final_response = {"Text": rag_response}
 
-        # Initialize DKG
-        ot_node_hostname = os.getenv("OT_NODE_HOSTNAME") + ":8900"
-        node_provider = NodeHTTPProvider(ot_node_hostname)
-        blockchain_provider = BlockchainProvider(
-                os.getenv("RPC_ENDPOINT"), 
-                os.getenv("WALLET_PRIVATE_KEY")
-            )
-
-        # initialize the DKG client on OriginTrail DKG
-        dkg = DKG(node_provider, blockchain_provider)
-
-        print("query: ")
-        pprint(query)
-        query_graph_result = dkg.graph.query(
-            query,
-            repository="privateCurrent",
-        )
-        print("query_graph_result: ")
-        pprint(query_graph_result)
-        executor.shutdown()
-        return str(query_graph_result)
-    if classification == "RAG":
-        additional_matches = {}
-        """ if entities:
-            # Run similaritySearch for each entity in the executor and gather the results
-            entity_search_tasks = [loop.run_in_executor(executor, similaritySearch, entity, vector_db_entities) for entity in entities]
-            entity_search_results = await asyncio.gather(*entity_search_tasks)
-            
-            # Format the results for additional matches
-            additional_matches = {entity: result for entity, result in zip(entities, entity_search_results)} """
-
-        # Call the RAG function with the original question, initial matches, and additional entity matches
-        rag_response = RAG(question, initial_matches, additional_matches, history)
-        print("RAG Response: ")
-        pprint(rag_response)
-        executor.shutdown()
-        return rag_response
-
+    executor.shutdown()
+    return final_response
+    
 if __name__ == "__main__":
     import sys
 

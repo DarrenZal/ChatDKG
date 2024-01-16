@@ -13,7 +13,7 @@ schema:Place a owl:Class .
 schema:MediaNode a owl:Class .
 schema:Person a owl:Class .
 schema:Event a owl:Class .
-schema:ImpactArea a owl:Class .
+schema:impactarea a owl:Class .
 schema:PostalAddress a owl:Class .
 schema:Continent a owl:Class .
 schema:name a owl:ObjectProperty;
@@ -94,7 +94,7 @@ schema:founder a owl:ObjectProperty;
 
 schema:areaServed a owl:ObjectProperty;
     rdfs:domain [ a owl:Class; owl:unionOf (schema:Organization) ] ;
-    rdfs:range [ a owl:Class; owl:unionOf (schema:MediaObject schema:owl:Thing schema:Event schema:Organization schema:Place schema:PostalAddress schema:Continent) ] .
+    rdfs:range [ a owl:Class; owl:unionOf (schema:ImpactArea) ] .
 
 schema:funder a owl:ObjectProperty;
     rdfs:domain [ a owl:Class; owl:unionOf (schema:Organization) ] ;
@@ -161,14 +161,6 @@ schema:totalValueLocked a owl:ObjectProperty;
     rdfs:range owl:Thing .
 
 schema:marketCap a owl:ObjectProperty;
-    rdfs:domain [ a owl:Class; owl:unionOf (schema:Organization) ] ;
-    rdfs:range owl:Thing .
-
-schema:circleCatalyst a owl:ObjectProperty;
-    rdfs:domain [ a owl:Class; owl:unionOf (schema:Organization) ] ;
-    rdfs:range [ a owl:Class; owl:unionOf (schema:Person) ] .
-
-schema:circleNumber a owl:ObjectProperty;
     rdfs:domain [ a owl:Class; owl:unionOf (schema:Organization) ] ;
     rdfs:range owl:Thing .
 
@@ -316,19 +308,7 @@ schema:author a owl:ObjectProperty;
     rdfs:domain [ a owl:Class; owl:unionOf (schema:CreativeWork) ] ;
     rdfs:range [ a owl:Class; owl:unionOf (schema:Organization schema:Person) ] .
 
-schema:excerpt a owl:ObjectProperty;
-    rdfs:domain [ a owl:Class; owl:unionOf (schema:CreativeWork) ] ;
-    rdfs:range owl:Thing .
-
 schema:file a owl:ObjectProperty;
-    rdfs:domain [ a owl:Class; owl:unionOf (schema:CreativeWork) ] ;
-    rdfs:range owl:Thing .
-
-schema:imageurl a owl:ObjectProperty;
-    rdfs:domain [ a owl:Class; owl:unionOf (schema:CreativeWork) ] ;
-    rdfs:range owl:Thing .
-
-schema:inlanguage a owl:ObjectProperty;
     rdfs:domain [ a owl:Class; owl:unionOf (schema:CreativeWork) ] ;
     rdfs:range owl:Thing .
 
@@ -347,10 +327,6 @@ schema:datepublished a owl:ObjectProperty;
 schema:blockchainecosystem a owl:ObjectProperty;
     rdfs:domain [ a owl:Class; owl:unionOf (schema:Organization) ] ;
     rdfs:range owl:Thing .
-
-schema:logo a owl:ObjectProperty;
-    rdfs:domain [ a owl:Class; owl:unionOf (schema:Organization) ] ;
-    rdfs:range [ a owl:Class; owl:unionOf (schema:owl:Thing) ] .
 
 schema:date a owl:ObjectProperty;
     rdfs:domain [ a owl:Class; owl:unionOf (schema:InvestmentOrGrant) ] ;

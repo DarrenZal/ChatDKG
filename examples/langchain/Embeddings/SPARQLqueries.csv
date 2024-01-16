@@ -1,0 +1,2 @@
+question,query
+who is working in renerwable energy?, SELECT ?organization WHERE { ?organization a <http://schema.org/Organization>. ?organization <http://schema.org/areaServed> <https://example.com/urn:impactarea:Energy>. }

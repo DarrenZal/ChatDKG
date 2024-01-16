@@ -30,12 +30,10 @@ async function createKnowledgeAsset(data) {
 // Main function to iterate over sections and create assets
 (async () => {
   for (const section in jsonData) {
-   /*  if (section === "OtherCompanies") {
-      console.log(`Skipping section: ${section}`);
-      continue; // Skip this iteration and proceed to the next section
-    } */
-
-    console.log(`Creating Knowledge Asset for section: ${section}`);
-    await createKnowledgeAsset(jsonData[section]);
+    if (section == "blockchain_ecosystems_json_ld") {
+     console.log(section);
+     console.log(`Creating Knowledge Asset for section: ${section}`);
+     await createKnowledgeAsset(jsonData[section]);
+  }
   }
 })();
