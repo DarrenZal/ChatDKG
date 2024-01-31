@@ -24,3 +24,5 @@ examples/langchain/searchcopy.py
 examples/langchain/spacy-llm
 examples/langchain/KAs
 examples/langchain/TEST
+examples/langchain/query_logs.*
+examples/langchain/RAG_SPARQL_old.py
