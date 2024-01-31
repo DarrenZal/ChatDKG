@@ -238,35 +238,32 @@ async function assertionsToEntityEmbeddings(assertions, ual, entityDetailsMap, a
         const entityTypeUri = entityTypeArray && entityTypeArray.length > 0 ? entityTypeArray[0] : undefined;
         const entityTypeValue = entityTypeUri ? getPredicateName(entityTypeUri) : undefined;
 
-        if (!entityTypeUri || !entityTypeValue) {
+        if (!entityTypeUri || !entityTypeValue || !attributeRecommendations[entityTypeUri]) {
             continue;
         }
 
-        const recommendations = attributeRecommendations[entityTypeUri] || { NER: [], RAG: [] };
+        const recommendations = attributeRecommendations[entityTypeUri];
         const embedding = {
             attributes: {
-                NER: [`type: ${entityTypeValue}`], 
-                RAG: []
+                NER: [],  // Removed the type from NER
+                RAG: [`type: ${entityTypeValue}`]  // Retain type in RAG
             },
             ual: ual
         };
 
         // Process NER fields
         recommendations.NER.forEach(predicateUri => {
-            if (entityUri === "https://example.com/urn:organization:ReFiDAO") {
-                console.log(`Processing NER attribute: ${predicateUri} for ReFiDAO`);
-            }
             if (item.hasOwnProperty(predicateUri)) {
                 const valueObject = item[predicateUri][0];
                 const attributeValue = resolveEntityValue(valueObject, entityDetailsMap, false, entityUri, allData);
-                const predicateName = getPredicateName(predicateUri);
+                // Removed the predicate name prefix for NER values
                 const sanitizedValue = sanitizeText(attributeValue);
-                embedding.attributes.NER.push(`${predicateName}: ${sanitizedValue}`);
+                embedding.attributes.NER.push(sanitizedValue);
             }
         });
 
-        // Initialize RAG with NER values
-        embedding.attributes.RAG = [...embedding.attributes.NER];
+        // Initialize RAG with NER values and additional type
+        embedding.attributes.RAG = [`type: ${entityTypeValue}`, ...embedding.attributes.NER];
 
         // Add additional RAG fields
         recommendations.RAG.forEach(predicateUri => {
@@ -278,7 +275,6 @@ async function assertionsToEntityEmbeddings(assertions, ual, entityDetailsMap, a
                 embedding.attributes.RAG.push(`${predicateName}: ${sanitizedValue}`);
             }
         });
-
         embedding.NER = embedding.attributes.NER.join('; ');
         embedding.RAG = embedding.attributes.RAG.join('; ');
         entityEmbeddings[entityUri] = embedding;

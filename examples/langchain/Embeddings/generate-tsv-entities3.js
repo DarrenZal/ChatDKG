@@ -3,6 +3,10 @@ import 'dotenv/config';
 import DKG from 'dkg.js';
 
 const attributeRecommendations = JSON.parse(fs.readFileSync('suggestedEntityEmbeddings.json', 'utf8'));
+Object.keys(attributeRecommendations).forEach(type => {
+    attributeRecommendations[type].NER = attributeRecommendations[type].NER.map(attr => attr.toLowerCase());
+    attributeRecommendations[type].RAG = attributeRecommendations[type].RAG.map(attr => attr.toLowerCase());
+});
 
 const dkg = new DKG({
     endpoint: 'http://152.89.107.95',
@@ -37,6 +41,9 @@ function extractValue(item, entityId) {
     if (item == null) {
         return undefined;
     }
+    if (entityId === "https://example.com/urn:organization:ReFiDAO") {
+        console.log(`Extracted value for ReFiDAO: ${JSON.stringify(item)}`);
+    }
     return item.hasOwnProperty('@value') ? item['@value'] : item;
 }
 
@@ -49,15 +56,23 @@ function getSchemaUrl(item) {
     }
 }
 
-function resolveEntityValue(valueObject, entityDetailsMap, isUriPredicate = false, entityId) {
-    if (typeof valueObject === 'object' && valueObject !== null) {
-        if (valueObject['@id']) {
-            const resolvedId = valueObject['@id'];
-            if (entityId === "https://example.com/urn:organization:ReFiDAO") {
-                console.log(`Debug: Resolving ID ${resolvedId} for ${entityId}`);
+function resolveEntityValue(valueObject, entityDetailsMap, isUriPredicate = false, entityId, allData) {
+    if (entityId === "https://example.com/urn:organization:ReFiDAO") {
+        console.log(`Resolving entity value for ReFiDAO, valueObject: ${JSON.stringify(valueObject)}`);
+    }
+    if (valueObject['@id']) {
+        const resolvedId = valueObject['@id'];
+        
+        // Handle blank node identifiers
+        if (resolvedId.startsWith('_:')) {
+            const resolvedEntity = allData.find(item => item['@id'] === resolvedId);
+            if (resolvedEntity) {
+                // Process the resolved entity and add to entityDetailsMap if not already there
+                extractAndStoreLinkedEntity(resolvedEntity, entityDetailsMap);
             }
-            return entityDetailsMap[resolvedId]?.name || getSimpleIdentifier(resolvedId);
         }
+
+        return entityDetailsMap[resolvedId]?.name || getSimpleIdentifier(resolvedId);
     }
     return valueObject['@value'] || '';
 }
@@ -101,16 +116,7 @@ function buildEntityDetailsMap(inputArray) {
         entityDetailsMap[entityId] = entityDetails;
     });
 
-    // Debugging: Print details for ReFiDAO and its areaServed attribute
-    if (entityDetailsMap["https://example.com/urn:organization:ReFiDAO"]) {
-        console.log("Debug: ReFiDAO details in entityDetailsMap", entityDetailsMap["https://example.com/urn:organization:ReFiDAO"]);
-        const areaServedId = entityDetailsMap["https://example.com/urn:organization:ReFiDAO"].areaServed;
-        if (areaServedId && entityDetailsMap[areaServedId]) {
-            console.log(`Debug: areaServed (${areaServedId}) details in entityDetailsMap`, entityDetailsMap[areaServedId]);
-        } else {
-            console.log(`Debug: areaServed ID not found or not resolved in entityDetailsMap for ReFiDAO`);
-        }
-    }
+    console.log(`Entity details map built with ${Object.keys(entityDetailsMap).length} entities`);
     return entityDetailsMap;
 }
 
@@ -118,7 +124,7 @@ const preferredUALs = {
     'profile': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181441',
     'organization': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203432',
     'impactArea': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203428',
-    'blockchainEcosystem': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1962496',
+    'blockchainEcosystem': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203793',
     'foundersCircle': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181445',
     'localNode': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181446',
     'deal': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/181448',
@@ -128,15 +134,18 @@ const preferredUALs = {
 };
 
 
-function shouldUseEntityData(entityId, currentUAL, entityDetailsMap) {
-    // Get the preferred UAL for the entity type
+function shouldUseEntityData(entityId, currentUAL, entityDetailsMap, allData) {
     const entityType = entityId.split(':')[2];
     const preferredUAL = preferredUALs[entityType];
-    const useData = currentUAL === preferredUAL || !entityDetailsMap[entityId]?.sourceUAL;
 
-    // Debugging log
+    // Check if the entity exists in the preferred UAL dataset
+    const existsInPreferredUAL = allData.some(item => 
+        item['@id'] === entityId && item.ual === preferredUAL);
+
+    const useData = currentUAL === preferredUAL || !existsInPreferredUAL;
+
     if (entityId === "https://example.com/urn:organization:ReFiDAO") {
-        console.log(`Entity: ${entityId}, Current UAL: ${currentUAL}, Preferred UAL: ${preferredUAL}, Use Data: ${useData}`);
+        console.log(`Entity: ${entityId}, Current UAL: ${currentUAL}, Preferred UAL: ${preferredUAL}, Exists in Preferred UAL: ${existsInPreferredUAL}, Use Data: ${useData}`);
     }
 
     return useData;
@@ -144,14 +153,17 @@ function shouldUseEntityData(entityId, currentUAL, entityDetailsMap) {
 
 
 function extractAndStoreLinkedEntity(object, entityDetailsMap) {
-    if (object['@id'] === '_:c14n389') {
-        console.log(`Debug: Processing linked entity _:c14n389`, object);
-    }
     const linkedEntityId = object['@id'];
     if (!linkedEntityId) return;
 
+    if (linkedEntityId === "_:c14n389") {
+        console.log(`Extracting linked entity: ${linkedEntityId}`);
+    }
+
+    // Initialize the name
     let name = linkedEntityId.startsWith('_:') ? '' : getSimpleIdentifier(linkedEntityId);
 
+    // Check if the object has a 'name' property and extract it
     if (object.hasOwnProperty('http://schema.org/name')) {
         const nameProperty = object['http://schema.org/name'];
         if (Array.isArray(nameProperty) && nameProperty.length > 0 && nameProperty[0]['@value']) {
@@ -159,7 +171,8 @@ function extractAndStoreLinkedEntity(object, entityDetailsMap) {
         }
     }
 
-    entityDetailsMap[linkedEntityId] = { ...entityDetailsMap[linkedEntityId], name: name };
+    // Update the map with the resolved name
+    entityDetailsMap[linkedEntityId] = { name: name, types: object['@type'] || [] };
 }
 
 
@@ -210,52 +223,60 @@ function getPredicateName(predicateUri) {
     return predicateUri.substring(predicateUri.lastIndexOf('/') + 1);
 }
 
-async function assertionsToEntityEmbeddings(assertions, ual, entityDetailsMap, attributeRecommendations) {
+async function assertionsToEntityEmbeddings(assertions, ual, entityDetailsMap, attributeRecommendations, allData) {
     console.log(`Processing ${assertions.length} assertions for UAL: ${ual}`);
     const entityEmbeddings = {};
 
     for (const item of assertions) {
         const entityUri = normalizeUrl(item['@id']);
 
-        if (!shouldUseEntityData(entityUri, ual, entityDetailsMap)) {
+        if (!entityDetailsMap[entityUri] || !shouldUseEntityData(entityUri, ual, entityDetailsMap, allData)) {
             continue;
         }
 
-        const entityTypeUri = item['@type'] && item['@type'].length > 0 ? item['@type'][0] : undefined;
-        if (!entityTypeUri) continue;
+        const entityTypeArray = item['@type'];
+        const entityTypeUri = entityTypeArray && entityTypeArray.length > 0 ? entityTypeArray[0] : undefined;
+        const entityTypeValue = entityTypeUri ? getPredicateName(entityTypeUri) : undefined;
+
+        if (!entityTypeUri || !entityTypeValue) {
+            continue;
+        }
 
         const recommendations = attributeRecommendations[entityTypeUri] || { NER: [], RAG: [] };
-        const embedding = { attributes: { NER: [], RAG: [] }, ual: ual };
-
-        const processAttribute = (predicateUri, addToRAG = false) => {
-            if (item.hasOwnProperty(predicateUri)) {
-                const valueObject = item[predicateUri][0];
-                let attributeValue;
-
-                if (valueObject['@id']) {
-                    const resolvedId = valueObject['@id'];
-                    attributeValue = entityDetailsMap[resolvedId]?.name || getSimpleIdentifier(resolvedId);
-                } else {
-                    attributeValue = valueObject['@value'] || '';
-                }
-
-                const attributeString = `${getPredicateName(predicateUri)}: ${sanitizeText(attributeValue)}`;
-                embedding.attributes.NER.push(attributeString);
-                if (addToRAG) {
-                    embedding.attributes.RAG.push(attributeString);
-                }
-            }
+        const embedding = {
+            attributes: {
+                NER: [`type: ${entityTypeValue}`], 
+                RAG: []
+            },
+            ual: ual
         };
 
-        // Process NER attributes
+        // Process NER fields
         recommendations.NER.forEach(predicateUri => {
-            processAttribute(predicateUri);
+            if (entityUri === "https://example.com/urn:organization:ReFiDAO") {
+                console.log(`Processing NER attribute: ${predicateUri} for ReFiDAO`);
+            }
+            if (item.hasOwnProperty(predicateUri)) {
+                const valueObject = item[predicateUri][0];
+                const attributeValue = resolveEntityValue(valueObject, entityDetailsMap, false, entityUri, allData);
+                const predicateName = getPredicateName(predicateUri);
+                const sanitizedValue = sanitizeText(attributeValue);
+                embedding.attributes.NER.push(`${predicateName}: ${sanitizedValue}`);
+            }
         });
 
-        // Process RAG attributes
+        // Initialize RAG with NER values
+        embedding.attributes.RAG = [...embedding.attributes.NER];
+
+        // Add additional RAG fields
         recommendations.RAG.forEach(predicateUri => {
-            const isInNER = embedding.attributes.NER.some(attr => attr.startsWith(getPredicateName(predicateUri) + ':'));
-            processAttribute(predicateUri, !isInNER);
+            if (item.hasOwnProperty(predicateUri) && !embedding.attributes.NER.some(attr => attr.startsWith(getPredicateName(predicateUri) + ':'))) {
+                const valueObject = item[predicateUri][0];
+                const attributeValue = resolveEntityValue(valueObject, entityDetailsMap, true, entityUri, allData);
+                const predicateName = getPredicateName(predicateUri);
+                const sanitizedValue = sanitizeText(attributeValue);
+                embedding.attributes.RAG.push(`${predicateName}: ${sanitizedValue}`);
+            }
         });
 
         embedding.NER = embedding.attributes.NER.join('; ');
@@ -270,9 +291,6 @@ async function assertionsToEntityEmbeddings(assertions, ual, entityDetailsMap, a
 function entityEmbeddingsToTsv(entityEmbeddings) {
     const header = 'EntityID\tNER\tRAG\tUAL';
     const rows = Object.entries(entityEmbeddings).map(([entityId, { type, NER, RAG, ual }]) => {
-        if (entityId === "https://example.com/urn:organization:ReFiDAO") {
-            console.log(`TSV row for ReFiDAO: ${entityId}\t${NER}\t${RAG}\t${ual}`);
-        }
         // Check if entityId starts with 'http'
         if (!entityId.startsWith('http')) {
             return null; // Skip this entry
@@ -291,16 +309,16 @@ function entityEmbeddingsToTsv(entityEmbeddings) {
 (async () => {
 
     const uals = [
-      /*   'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181441', //https://example.com/urn:profile */
-      'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203432', //https://example.com/urn:organization
-      'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203428', //https://example.com/urn:impactArea
-       /*    'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1962496', //https://examplecom/urn:blockchainEcosystem
+        'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181441', //https://example.com/urn:profile
+        'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203432', //https://example.com/urn:organization
+        'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203428', //https://example.com/urn:impactArea
+          'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203793', //https://examplecom/urn:blockchainEcosystem
          'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181445', //https://example.com/urn:foundersCircle
          'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181446', //https://example.com/urn:localNode
          'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/181448', //https://examplecom/urn:deal
          'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1967103',  //https://examplecom/urn:WorkingGroup
          'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181649', //https://examplecom/urn:event 
-        'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181509'   //https://example.com/urn:content */ 
+        'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181509'   //https://example.com/urn:content
         // 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181450'  //countries */
     ]
     let allData = [];
@@ -311,7 +329,9 @@ function entityEmbeddingsToTsv(entityEmbeddings) {
             const jsonData = await dkg.asset.get(ual);
             if (jsonData && jsonData.assertion) {
                 console.log(`Fetched ${jsonData.assertion.length} assertions from UAL: ${ual}`);
-                allData.push(...jsonData.assertion);
+                // Add the UAL to each assertion
+                const assertionsWithUAL = jsonData.assertion.map(assertion => ({ ...assertion, ual }));
+                allData.push(...assertionsWithUAL);
             }
         } catch (error) {
             console.error(`Error fetching data for UAL: ${ual}`, error);
@@ -327,7 +347,7 @@ function entityEmbeddingsToTsv(entityEmbeddings) {
         try {
             const jsonData = await dkg.asset.get(ual);
             if (jsonData && jsonData.assertion) {
-                const embeddings = await assertionsToEntityEmbeddings(jsonData.assertion, ual, entityDetailsMap, attributeRecommendations);
+                const embeddings = await assertionsToEntityEmbeddings(jsonData.assertion, ual, entityDetailsMap, attributeRecommendations, allData);
                 combinedEntityEmbeddings = { ...combinedEntityEmbeddings, ...embeddings };
                 console.log(`Added ${Object.keys(embeddings).length} embeddings for UAL: ${ual}`);
             }
