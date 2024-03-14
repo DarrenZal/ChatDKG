@@ -91,7 +91,7 @@ jsonld_files = ['did_dkg_otp_0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f_1181441.
                 'did_dkg_otp_0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f_1181649.json',
                 'did_dkg_otp_0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f_1181509.json',
                 'did_dkg_otp_0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f_1181448.json'] # Replace with your actual file paths
-output_file_path = 'ontology.ttl'
+output_file_path = 'ontology_output.ttl'
 
 # Convert RDF to OWL
 rdf_to_owl(jsonld_files, output_file_path)

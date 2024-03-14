@@ -26,3 +26,10 @@ examples/langchain/KAs
 examples/langchain/TEST
 examples/langchain/query_logs.*
 examples/langchain/RAG_SPARQL_old.py
+examples/langchain/Embeddings/Hide
+examples/langchain/Ontology/Hide
+examples/langchain/pyvenv.cfg
+examples/twitter-bot/.env
+package.json
+package-lock.json
+node_modules

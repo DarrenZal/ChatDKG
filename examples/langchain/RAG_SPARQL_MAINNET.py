@@ -4,6 +4,7 @@ import os
 import json
 import asyncio
 import concurrent.futures
+from typing import Dict, Any
 from openai import OpenAI
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
@@ -28,8 +29,8 @@ def timed_function(func):
     return wrapper
 
 # Milvus Client Initialization
-CLUSTER_ENDPOINT = os.getenv("MILVUS_URI")
-TOKEN = os.getenv("MILVUS_TOKEN")
+CLUSTER_ENDPOINT = os.getenv("MILVUS_URI_MAINNET")
+TOKEN = os.getenv("MILVUS_TOKEN_MAINNET")
 milvus_client = MilvusClient(uri=CLUSTER_ENDPOINT, token=TOKEN)
 
 # Initialize the Sentence Transformer model
@@ -78,11 +79,11 @@ def read_ontology_file(file_path):
 def execute_sparql_query(query):
     try:
         # Initialize DKG
-        ot_node_hostname = os.getenv("OT_NODE_HOSTNAME") + ":8900"
+        ot_node_hostname = os.getenv("OT_NODE_HOSTNAME_MAINNET")+":8900"
         node_provider = NodeHTTPProvider(ot_node_hostname)
         blockchain_provider = BlockchainProvider(
-            os.getenv("RPC_ENDPOINT"), 
-            os.getenv("WALLET_PRIVATE_KEY")
+            os.getenv("RPC_ENDPOINT_MAINNET"), 
+            os.getenv("WALLET_PRIVATE_KEY_MAINNET")
         )
 
         # Initialize the DKG client
@@ -104,12 +105,18 @@ def execute_sparql_query(query):
 
 
 @timed_function
-def extract_entities_and_classify(question: str, query_matches, entity_matches, ontology_content, history) -> (str, str, str):
+def extract_entities_and_classify(question: str, query_matches, entity_matches, ontology_content, history) -> Dict[str, Any]:
     try:
-        # Format the query matches for the prompt
+        # Initialize variables
+        query = ''  # Initialize query as an empty string
+        response = ''  # Initialize response as an empty string
+        UALs = []  # Initialize UALs as an empty list
+
+        # Format query and entity matches for the prompt
         formatted_query_matches = ", ".join([f"Query Match: {match}" for match in query_matches])
-        # Format the entity matches for the prompt
-        formatted_entity_matches = ", ".join([f"Query Match: {match}" for match in entity_matches])
+        formatted_entity_matches = ", ".join([f"Entity Match: {match}" for match in entity_matches])
+        pprint("formatted_entity_matches: ")
+        pprint(formatted_entity_matches)
 
         # Call the OpenAI ChatCompletion API
         completion = client.chat.completions.create(
@@ -120,19 +127,19 @@ def extract_entities_and_classify(question: str, query_matches, entity_matches, 
                 {
                     "role": "system",
                     "content": (
-                        "This system is for a ReFi chatbot to answer questions about Regenerative Finance (ReFi). "
-                        "Upon receiving a natural language prompt, classify it as 'SPARQL' or 'RAG'. "
-                        "'SPARQL' means the prompt is answerable with a SPARQL query using a provided OWL ontology, respecting objectProperties' domain and range, as well as any relevant data from Entity Matches."
-                        "'RAG' means the prompt is better suited for retrieval augmented generation with relevant search results in Entity Matches as well as your own knowledge."
+                        "This is for a ReFi chatbot to answer questions about Regenerative Finance (ReFi). "
+                        "Upon receiving a prompt, always generate a response using Retrieval Augmented Generation (RAG), "
+                        "and also generate a SPARQL query if the prompt can be answered using the provided OWL ontology. "
                         "For RAG, Ignore any of the Entity Matches that are irrelevant to the prompt. Also, Format the response with HTML line breaks (<br>) for use in HTML."
-                        "For RAG, provide a 'Response' object for user display. "
-                        "For SPARQL queries, ensure aggregation of total values before applying filters, and include details like IDs or names for clarity. "
+                        "RAG responses should summarize relevant information and, if applicable, include unique UALs of entity matches used. "
+                        "SPARQL queries should aggregate total values before filters and include details for clarity. "
                         "Retrieve all attributes for a subject in question when possible, ie retrieve more info than necessary"
                         "Consider the included SPARQL query matches 'Query Matches' from the database when creating the query. "
-                        "Responses must be in JSON format. Example: "
-                        "For 'How many organizations received over $1000 in funding?', return '{\"Classification\": \"SPARQL\", \"SPARQL\": \"SELECT ?organization (SUM(?amount) AS ?totalFunding) WHERE { ?organization a schema:Organization. ?investment schema:investee ?organization. ?investment schema:amount ?amount. } GROUP BY ?organization HAVING (SUM(?amount) > 1000)\", \"Response\": {\"Text\": \"Relevant response\"}}'. "
-                        "For RAG: 'Who is Monty Merlin?' with RAGdata containing Monty Merlin's ID, use the ID to build a SPARQL query to retreive all of this entity's attribues."
-                        "For SPARQL: 'What is the phone number of ExampleDAO?' with RAGdata containing ExampleDAO's ID, use the ID to build a SPARQL query to retreive all of this entity's attribues."
+                        "Even if classified as SPARQL, always try to generate RAG response as well if you can."
+                        "Always format responses in JSON, with 'Classification' indicating 'RAG' or 'SPARQL', and include both responses when SPARQL is applicable. "
+                        "Ensure RAG responses are formatted with HTML line breaks for display in HTML environments. "
+                        "Example output structure for RAG: {'Classification': 'RAG', 'Response': 'Text here <br><br> Additional text.', 'UALs': ['did:example']}. "
+                        "For SPARQL: {'Classification': 'SPARQL', 'SPARQL': 'SELECT ?entity WHERE {...}'}."
                     )
                 },
                 {
@@ -146,31 +153,53 @@ def extract_entities_and_classify(question: str, query_matches, entity_matches, 
         # Log token usage for cost estimation
         completion_tokens = completion.usage.completion_tokens
         prompt_tokens = completion.usage.prompt_tokens
-        OpenAICallCost = 0.03*prompt_tokens/1000 + 0.06*completion_tokens/1000
+        OpenAICallCost = 0.01 * prompt_tokens / 1000 + 0.03 * completion_tokens / 1000
         print(f"extract_entities_and_classify.  input tokens: {prompt_tokens}, output tokens: {completion_tokens}, cost: {OpenAICallCost}")
 
+        # Processing API response
         extracted_content = completion.choices[0].message.content
-        print("Extracted Content:", extracted_content)  # You have this for debugging.
+        print("Extracted Content:", extracted_content)  # For debugging
         data = json.loads(extracted_content)
-        
-        classification = data.get("Classification", "Error")
-        if classification == "Error":
-            print("Classification key missing in response")
-            return 'Error', '', ''
 
-        # Adjust handling here based on the actual structure of "Response"
-        if classification == "SPARQL":
-            query = data.get("SPARQL", '')
-            return classification, query, ''
-        elif classification == "RAG":
-            # Directly use the response string if classification is "RAG"
-            response = data.get("Response", "")  # Assuming "Response" is a string.
-            return classification, '', response
+        classification = data.get("Classification", "Error")
+        if classification != "Error":
+            if classification == "SPARQL":
+                query = data.get("SPARQL", '')
+            response = data.get("Response", "")
+            UALs = data.get("UALs", [])
+
+            # Remove duplicates by converting the list to a set, then back to a list
+            unique_UALs = list(set(UALs))
+
+            return {
+                "Classification": classification,
+                "SPARQL": query,
+                "Response": {
+                    "Text": response,
+                    "UALs": unique_UALs,  # Return the list with duplicates removed
+                }
+            }
         else:
-            return 'Error', '', ''
+            print("Classification key missing in response")
+            return {
+                "Classification": 'Error',
+                "SPARQL": '',
+                "Response": {
+                    "Text": '',
+                    "UALs": [],
+                }
+            }
+
     except Exception as e:
         print(f"Error occurred: {e}")
-        return 'Error', '', ''
+        return {
+            "Classification": 'Error',
+            "SPARQL": '',
+            "Response": {
+                "Text": '',
+                "UALs": [],
+            }
+        }
 
 
 @timed_function
@@ -213,44 +242,55 @@ async def RAGandSPARQL(question, history):
     pprint("Starting RAGandSPARQL with question: " + question)
     ontology_file_path = "Ontology/ontology.ttl"
     ontology_content = read_ontology_file(ontology_file_path)
-    ontology_content = ""
     
-    # Create a thread pool executor
     executor = concurrent.futures.ThreadPoolExecutor()
-    
-    # Get the current event loop
     loop = asyncio.get_event_loop()
 
-    # Run similarity search on EntityCollection and QueryCollection in parallel
     initial_matches_task = loop.run_in_executor(executor, similarity_search, question, milvus_client, "EntityCollection")
     query_search_results_task = loop.run_in_executor(executor, similarity_search, question, milvus_client, "QueryCollection")
     
-    # Wait for both similarity searches to complete
     initial_matches, query_search_results = await asyncio.gather(initial_matches_task, query_search_results_task)
 
-    # Now, only call extract_entities_and_classify (which also handles RAG response internally)
-    classification, query, rag_response = await loop.run_in_executor(executor, extract_entities_and_classify, question, query_search_results, initial_matches, ontology_content, history)
+    # Adjusted to expect a single dictionary return
+    response_data = await loop.run_in_executor(executor, extract_entities_and_classify, question, query_search_results, initial_matches, ontology_content, history)
+    
+    final_response = {"Text": ""}
+    classification = response_data.get("Classification", "Error")
 
-    final_response = {"Text": "An error occurred."}
-    if classification == "SPARQL":
-        # If the classification is SPARQL, prepend ontology prefixes and execute the SPARQL query
-        query_with_prefixes = prepend_ontology_prefixes(query, ontology_content)
-        sparql_results = execute_sparql_query(query_with_prefixes)
+    # Always attempt to include a RAG response
+    rag_response = response_data.get("Response", {}).get("Text", "")
+    UALs = response_data.get("Response", {}).get("UALs", [])
+    if rag_response:
+        final_response["Text"] += "\n" + rag_response
+        if UALs:
+            # Prepare the prefix for the UAL links
+            ual_prefix = "https://dkg.origintrail.io/explore?ual="
+            # Convert each UAL to an HTML link
+            links = [f'<a href="{ual_prefix}{ual}">{ual}</a>' for ual in UALs]
+            # Join the links with HTML line breaks for display
+            links_str = "<br>".join(links)
+            # Add a double line break and space before "Knowledge Assets:"
+            final_response["Text"] += "<br><br>Knowledge Assets:<br>" + links_str
 
-        if sparql_results:
-            formatted_results = format_query_result(sparql_results)
-            final_response = {"Text": "SPARQL Results:\n" + formatted_results}
+    # Include SPARQL query if present
+    if classification == "SPARQL" or response_data.get("SPARQL"):
+        query = response_data.get("SPARQL", "")
+        if query:
+            query_with_prefixes = prepend_ontology_prefixes(query, ontology_content)
+            sparql_results = execute_sparql_query(query_with_prefixes)
+            if sparql_results:
+                formatted_results = format_query_result(sparql_results)
+                final_response["Text"] += "Results:\n" + formatted_results
+            else:
+                final_response["Text"] += "No results found."
         else:
-            final_response = {"Text": "No SPARQL results found."}
-    elif classification == "RAG":
-        # If the classification is RAG, use the RAG response directly
-        final_response = {"Text": rag_response}
-    else:
-        # Handle error or unexpected classification result
-        final_response = {"Text": "An error occurred during processing."}
+            final_response["Text"] += "SPARQL query was expected but not provided."
 
-    executor.shutdown()
+    if not final_response["Text"].strip():
+        final_response = {"Text": "No results found."}
+
     return final_response
+
     
 if __name__ == "__main__":
     import sys

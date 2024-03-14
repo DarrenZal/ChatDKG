@@ -1,2 +1,0 @@
-question,query
-who is working in renerwable energy?, SELECT ?entity WHERE { { ?entity a <http://schema.org/Organization> . ?entity <http://schema.org/areaServed> <https://example.com/urn:impactarea:Energy> . } UNION { ?entity a <http://schema.org/Person> . ?entity <http://schema.org/knowsAbout> ?knowledge . FILTER(CONTAINS(LCASE(?knowledge), "energy")) } FILTER (!STRSTARTS(STR(?entity), "_:"))}

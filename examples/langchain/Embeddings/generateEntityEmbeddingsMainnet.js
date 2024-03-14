@@ -9,12 +9,12 @@ Object.keys(attributeRecommendations).forEach(type => {
 });
 
 const dkg = new DKG({
-    endpoint: 'http://152.89.107.95',
+    endpoint: 'http://194.59.205.216',
     port: 8900,
     blockchain: {
-        name: 'otp::testnet',
-        publicKey: process.env.WALLET_PUBLIC_KEY,
-        privateKey: process.env.WALLET_PRIVATE_KEY,
+        name: 'otp::mainnet',
+        publicKey: process.env.WALLET_PUBLIC_KEY_MAINNET,
+        privateKey: process.env.WALLET_PRIVATE_KEY_MAINNET,
     },
 });
 
@@ -41,9 +41,6 @@ function extractValue(item, entityId) {
     if (item == null) {
         return undefined;
     }
-    if (entityId === "https://example.com/urn:organization:ReFiDAO") {
-        console.log(`Extracted value for ReFiDAO: ${JSON.stringify(item)}`);
-    }
     return item.hasOwnProperty('@value') ? item['@value'] : item;
 }
 
@@ -57,12 +54,9 @@ function getSchemaUrl(item) {
 }
 
 function resolveEntityValue(valueObject, entityDetailsMap, isUriPredicate = false, entityId, allData) {
-    if (entityId === "https://example.com/urn:organization:ReFiDAO") {
-        console.log(`Resolving entity value for ReFiDAO, valueObject: ${JSON.stringify(valueObject)}`);
-    }
     if (valueObject['@id']) {
         const resolvedId = valueObject['@id'];
-        
+
         // Handle blank node identifiers
         if (resolvedId.startsWith('_:')) {
             const resolvedEntity = allData.find(item => item['@id'] === resolvedId);
@@ -121,16 +115,16 @@ function buildEntityDetailsMap(inputArray) {
 }
 
 const preferredUALs = {
-    'profile': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181441',
-    'organization': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203432',
-    'impactArea': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203428',
-    'blockchainEcosystem': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203793',
-    'foundersCircle': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181445',
+    'profile': 'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4162148',
+    'organization': 'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4162411',
+    'impactArea': 'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4162524',
+    'blockchainEcosystem': 'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4163172',
+    'foundersCircle': 'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4163453'/* ,
     'localNode': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181446',
-    'deal': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/181448',
+    'deal': 'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4141247',
     'WorkingGroup': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1967103',
     'event': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181649',
-    'content': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181509'
+    'content': 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181509' */
 };
 
 
@@ -139,14 +133,10 @@ function shouldUseEntityData(entityId, currentUAL, entityDetailsMap, allData) {
     const preferredUAL = preferredUALs[entityType];
 
     // Check if the entity exists in the preferred UAL dataset
-    const existsInPreferredUAL = allData.some(item => 
+    const existsInPreferredUAL = allData.some(item =>
         item['@id'] === entityId && item.ual === preferredUAL);
 
     const useData = currentUAL === preferredUAL || !existsInPreferredUAL;
-
-    if (entityId === "https://example.com/urn:organization:ReFiDAO") {
-        console.log(`Entity: ${entityId}, Current UAL: ${currentUAL}, Preferred UAL: ${preferredUAL}, Exists in Preferred UAL: ${existsInPreferredUAL}, Use Data: ${useData}`);
-    }
 
     return useData;
 }
@@ -155,10 +145,6 @@ function shouldUseEntityData(entityId, currentUAL, entityDetailsMap, allData) {
 function extractAndStoreLinkedEntity(object, entityDetailsMap) {
     const linkedEntityId = object['@id'];
     if (!linkedEntityId) return;
-
-    if (linkedEntityId === "_:c14n389") {
-        console.log(`Extracting linked entity: ${linkedEntityId}`);
-    }
 
     // Initialize the name
     let name = linkedEntityId.startsWith('_:') ? '' : getSimpleIdentifier(linkedEntityId);
@@ -177,37 +163,34 @@ function extractAndStoreLinkedEntity(object, entityDetailsMap) {
 
 
 
-function iterateOverProperties(object, entityDetailsMap, allData) {
+function iterateOverProperties(object, entityDetailsMap, allData, depth = 0, parentIds = []) {
+    const maxDepthBeforeLogging = 15; // Start logging when this depth is reached to avoid excessive logs
+
+    if (depth > maxDepthBeforeLogging) {
+        // Log only when approaching the max depth to reduce log volume
+        console.log(`Approaching max depth at ${depth}, Current ID: ${object['@id'] || 'N/A'}, Parent Chain: ${parentIds.join(' -> ')}`);
+    }
+
+    if (depth > 20) { // Assume 20 is near the call stack limit for your environment
+        console.log(`Max depth exceeded at ${depth}, Current ID: ${object['@id'] || 'N/A'}, Parent Chain: ${parentIds.join(' -> ')}`);
+        throw new Error(`Recursion depth exceeded with object ID: ${object['@id'] || 'N/A'}`);
+    }
+
     for (const property in object) {
-        if (object[property] !== null && typeof object[property] === 'object') {
-            // Check if the property is an array or an object
+        if (object.hasOwnProperty(property) && object[property] !== null && typeof object[property] === 'object') {
+            const nextParentIds = [...parentIds, object['@id']]; // Add current object ID to the parent chain
+
             if (Array.isArray(object[property])) {
                 object[property].forEach(subObject => {
-                    // Check if subObject is a reference (has '@id') and fetch the complete object from allData
-                    if (subObject['@id']) {
-                        const completeSubObject = allData.find(o => o['@id'] === subObject['@id']) || subObject;
-                        extractAndStoreLinkedEntity(completeSubObject, entityDetailsMap);
-                        iterateOverProperties(completeSubObject, entityDetailsMap, allData); // Recurse with the complete object
-                    } else {
-                        extractAndStoreLinkedEntity(subObject, entityDetailsMap);
-                        iterateOverProperties(subObject, entityDetailsMap, allData); // Recurse
-                    }
+                    iterateOverProperties(subObject, entityDetailsMap, allData, depth + 1, nextParentIds);
                 });
             } else {
-                // Apply similar logic for non-array objects
-                const subObject = object[property];
-                if (subObject['@id']) {
-                    const completeSubObject = allData.find(o => o['@id'] === subObject['@id']) || subObject;
-                    extractAndStoreLinkedEntity(completeSubObject, entityDetailsMap);
-                    iterateOverProperties(completeSubObject, entityDetailsMap, allData);
-                } else {
-                    extractAndStoreLinkedEntity(subObject, entityDetailsMap);
-                    iterateOverProperties(subObject, entityDetailsMap, allData);
-                }
+                iterateOverProperties(object[property], entityDetailsMap, allData, depth + 1, nextParentIds);
             }
         }
     }
 }
+
 
 
 function resolveLinkedEntities(entityDetailsMap, allData) {
@@ -238,35 +221,32 @@ async function assertionsToEntityEmbeddings(assertions, ual, entityDetailsMap, a
         const entityTypeUri = entityTypeArray && entityTypeArray.length > 0 ? entityTypeArray[0] : undefined;
         const entityTypeValue = entityTypeUri ? getPredicateName(entityTypeUri) : undefined;
 
-        if (!entityTypeUri || !entityTypeValue) {
+        if (!entityTypeUri || !entityTypeValue || !attributeRecommendations[entityTypeUri]) {
             continue;
         }
 
-        const recommendations = attributeRecommendations[entityTypeUri] || { NER: [], RAG: [] };
+        const recommendations = attributeRecommendations[entityTypeUri];
         const embedding = {
             attributes: {
-                NER: [`type: ${entityTypeValue}`], 
-                RAG: []
+                NER: [],  // Removed the type from NER
+                RAG: [`type: ${entityTypeValue}`]  // Retain type in RAG
             },
             ual: ual
         };
 
         // Process NER fields
         recommendations.NER.forEach(predicateUri => {
-            if (entityUri === "https://example.com/urn:organization:ReFiDAO") {
-                console.log(`Processing NER attribute: ${predicateUri} for ReFiDAO`);
-            }
             if (item.hasOwnProperty(predicateUri)) {
                 const valueObject = item[predicateUri][0];
                 const attributeValue = resolveEntityValue(valueObject, entityDetailsMap, false, entityUri, allData);
-                const predicateName = getPredicateName(predicateUri);
+                // Removed the predicate name prefix for NER values
                 const sanitizedValue = sanitizeText(attributeValue);
-                embedding.attributes.NER.push(`${predicateName}: ${sanitizedValue}`);
+                embedding.attributes.NER.push(sanitizedValue);
             }
         });
 
-        // Initialize RAG with NER values
-        embedding.attributes.RAG = [...embedding.attributes.NER];
+        // Initialize RAG with NER values and additional type
+        embedding.attributes.RAG = [`type: ${entityTypeValue}`, ...embedding.attributes.NER];
 
         // Add additional RAG fields
         recommendations.RAG.forEach(predicateUri => {
@@ -278,7 +258,6 @@ async function assertionsToEntityEmbeddings(assertions, ual, entityDetailsMap, a
                 embedding.attributes.RAG.push(`${predicateName}: ${sanitizedValue}`);
             }
         });
-
         embedding.NER = embedding.attributes.NER.join('; ');
         embedding.RAG = embedding.attributes.RAG.join('; ');
         entityEmbeddings[entityUri] = embedding;
@@ -309,16 +288,17 @@ function entityEmbeddingsToTsv(entityEmbeddings) {
 (async () => {
 
     const uals = [
-        'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181441', //https://example.com/urn:profile
-        'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203432', //https://example.com/urn:organization
-        'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203428', //https://example.com/urn:impactArea
-          'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2203793', //https://examplecom/urn:blockchainEcosystem
-         'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181445', //https://example.com/urn:foundersCircle
-         'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181446', //https://example.com/urn:localNode
-         'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/181448', //https://examplecom/urn:deal
-         'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1967103',  //https://examplecom/urn:WorkingGroup
-         'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181649', //https://examplecom/urn:event 
-        'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181509'   //https://example.com/urn:content
+        'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4162148', //https://example.com/urn:profile
+        'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4162411', //https://example.com/urn:organization
+        'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4162524', //https://example.com/urn:impactArea
+        'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4163172', //https://examplecom/urn:blockchainEcosystem
+        'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4163453', //https://example.com/urn:foundersCircle
+        'did:dkg:otp/0x5cac41237127f94c2d21dae0b14bfefa99880630/4141247', //https://examplecom/urn:deal
+
+        //   'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181446', //https://example.com/urn:localNode
+        //  'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1967103',  //https://examplecom/urn:WorkingGroup
+        //   'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181649', //https://examplecom/urn:event 
+        // 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181509'   //https://example.com/urn:content
         // 'did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/1181450'  //countries */
     ]
     let allData = [];
@@ -358,6 +338,6 @@ function entityEmbeddingsToTsv(entityEmbeddings) {
 
     console.log(`Generated combined entity embeddings, total count: ${Object.keys(combinedEntityEmbeddings).length}`);
     const tsvData = entityEmbeddingsToTsv(combinedEntityEmbeddings);
-    fs.writeFileSync('entities.tsv', tsvData);
+    fs.writeFileSync('entitiesMainnet.tsv', tsvData);
     console.log('Finished generating TSV file: entities.tsv');
 })();

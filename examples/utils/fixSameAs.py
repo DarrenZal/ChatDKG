@@ -85,7 +85,7 @@ def extract_and_validate_url(key, item):
             item[key] = url
 
 # Define your base URI
-BASE_URI = "https://example.com/"
+BASE_URI = "https://refidao.com/"
 
 # Modify the sanitize_id function to prepend the base URI only if not a valid URL
 def sanitize_id(id_value):
@@ -121,7 +121,7 @@ def remove_type_attributes(obj):
 data = []
 
 # Load JSON-LD data
-with open('../utils/combined_data.json', 'r') as file:
+with open('../utils/cleaned_jsonld_file.json', 'r') as file:
     data = json.load(file)
 
 # Go through each key in the JSON data
