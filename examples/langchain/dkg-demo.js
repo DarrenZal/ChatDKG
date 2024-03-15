@@ -3,7 +3,7 @@ import DKG from "dkg.js";
 import fs from "fs";
 
 // Parse the JSON data from file
-const jsonData = JSON.parse(fs.readFileSync("../utils/transformed_data_new.json"));
+const jsonData = JSON.parse(fs.readFileSync("../utils/data.json"));
 
 /* // Initialize the DKG client on OriginTrail DKG Testnet
 const dkg = new DKG({
@@ -16,7 +16,7 @@ const dkg = new DKG({
 }); */
 
 const dkg = new DKG({
-  endpoint: 'http://194.59.205.216',
+  endpoint: process.env.ENDPOINT_MAINNET,
   port: 8900,
   blockchain: {
     name: 'otp::mainnet',
@@ -63,19 +63,7 @@ async function createKnowledgeAsset(data) {
 
 (async () => {
   for (const section in jsonData) {
-    if(section != "deals_json_ld"
-     && section != "countries_json_ld" 
-     && section != "profiles_json_ld"
-      && section != "organizations_json_ld" 
-     && section != "impact_areas_json_ld" 
-     && section != "content_json_ld" 
-     && section != "blockchain_ecosystems_json_ld" 
-     && section != "founderscircles_json_ld" 
-     && section != "workingGroups_JSON_ld" 
-
-     ){
      console.log(`Creating Knowledge Asset for section: ${section}`);
      await createKnowledgeAsset(jsonData[section]);
-    }
   }
 })();

@@ -1,0 +1,95 @@
+{
+    "profiles_json_ld": [
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "@id": "https://example.com/urn:profile:JaneDoe",
+            "name": "Jane Doe",
+            "affiliation": {
+                "@id": "https://example.com/urn:organization:TechInnovations"
+            },
+            "description": "Innovator at Tech Innovations, focused on sustainable tech solutions",
+            "jobtitle": "Lead Innovator",
+            "twitter": [
+                "https://twitter.com/JaneInnovates"
+            ]
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "@id": "https://example.com/urn:profile:JohnSmith",
+            "name": "John Smith",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Green Ventures"
+            },
+            "description": "Angel Investor with Green Ventures, passionate about renewable energy",
+            "jobtitle": "Investor",
+            "twitter": [
+                "https://twitter.com/JohnGreenInvest"
+            ]
+        }
+    ],
+    "organizations_json_ld": [
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "@id": "https://example.com/urn:organization:TechInnovations",
+            "name": "Tech Innovations",
+            "description": "A company dedicated to creating sustainable technological solutions.",
+            "areaserved": {
+                "@id": "https://example.com/urn:impactarea:Technology"
+            }
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "@id": "https://example.com/urn:organization:GreenVentures",
+            "name": "Green Ventures",
+            "description": "An investment firm focused on supporting sustainable and renewable energy startups.",
+            "memberof": {
+                "@type": "Organization",
+                "name": "Sustainable Investments Group"
+            },
+            "areaserved": {
+                "@id": "https://example.com/urn:impactarea:RenewableEnergy"
+            }
+        }
+    ],
+    "impact_areas_json_ld": [
+        {
+            "@context": "https://schema.org",
+            "@type": "ImpactArea",
+            "@id": "https://example.com/urn:impactArea:Technology",
+            "name": "Sustainable Technology",
+            "description": "Focus on creating sustainable and environmentally friendly technological solutions."
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "ImpactArea",
+            "@id": "https://example.com/urn:impactArea:RenewableEnergy",
+            "name": "Renewable Energy",
+            "description": "Projects aimed at increasing the use and efficiency of renewable energy sources."
+        }
+    ],
+    "deals.json": [
+        {
+            "@context": "https://schema.org",
+            "@type": "InvestmentOrGrant",
+            "@id": "https://example.com/urn:deal:TechInnovSeed",
+            "name": "Tech Innov Seed",
+            "amount": {
+                "@value": "5000000",
+                "@type": "http://www.w3.org/2001/XMLSchema#decimal"
+            },
+            "date": "2024-01-15",
+            "investor": {
+                "@id": "https://example.com/urn:investor:GreenVentures"
+            },
+            "investee": {
+                "@id": "https://example.com/urn:organization:TechInnovations"
+            },
+            "fundinground": "Seed"
+        }
+    ]
+}
