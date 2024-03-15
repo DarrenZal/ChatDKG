@@ -24,7 +24,7 @@ The code for the front end can be found here: https://github.com/DarrenZal/Mysee
 Clone the repository:
 
 ```bash
-git clone https://github.com/Origintrail/ChatDKG
+git clone https://github.com/DarrenZal/ChatDKG.git
 cd ChatDKG
 ```
 
