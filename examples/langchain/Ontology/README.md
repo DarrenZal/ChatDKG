@@ -20,7 +20,9 @@ Ensure that all prerequisite knowledge asset files (in JSON-LD format) are avail
 Run the script using a Python interpreter:
 
 
-```python KnowledgeAssetsToOWL.py```
+```bash
+python KnowledgeAssetsToOWL.py
+```
 
 Upon successful execution, the script will generate an Ontology.ttl file, which contains the OWL ontology representing the structure and relationships of the input knowledge assets.
 
