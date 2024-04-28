@@ -12,7 +12,8 @@
     "geo": "http://www.w3.org/2003/01/geo/wgs84_pos#",
     "vs": "http://www.w3.org/2003/06/sw-vocab-status/ns#",
     "dtype": "http://www.linkedmodel.org/schema/dtype#",
-    "skos": "http://www.w3.org/2004/02/skos/core#"
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "onhandQuantity": "https://example.com/onhandQuantity"
   },
   "@graph": [
     {
