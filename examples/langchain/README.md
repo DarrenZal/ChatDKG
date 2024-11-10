@@ -6,10 +6,11 @@ It walks you through the process of creating a single Knowledge Asset on the Ori
 In contrast to generative QA systems such as ChatGPT, an extractive system doesn't "hallucinate", rather only extracts content from within the verifiable Knowledge Asset. 
 Additionally, to extend the extractive approach, we also demonstrate an "extract & summarize" approach that takes the extracted content from the Knowledge Asset and submits it to an LLM (in this case OpenAI) to summarize.
 
-Additionaly, this code can turn a quesiton into a SPARQL query and run it on the DKG.  This code has been adapted to function as a FastAPI backend, serving requests from a front end, such as a chatbot web app.  
+Additionally, this code can turn a question into a SPARQL query and run it on the DKG. This code has been adapted to function as a FastAPI backend, serving requests from a front end, such as a chatbot web app.
 An example can be found here: https://thick-nylon-eagle.fission.app/Chat/    
 The code for the front end can be found here: https://github.com/DarrenZal/Myseelia
 
+The repository also includes a Twitter Bot implementation in the `twitterBot` folder. This bot can forward tweets from users who tag it to the `app.py` application, enabling integration with Twitter conversations.
 
 ## Pre-requisites
 
@@ -115,8 +116,7 @@ This will generate responses based on the uploaded knowledge graph.
 
 If you encounter any issues, please check that you've correctly set all environment variables in the .env file and that you have the right versions of NodeJS and Python. If you continue to experience problems, please open an issue in the GitHub repository.
 
-
-## If deploying as a backend server with a seperate front end:
+## If deploying as a backend server with a separate front end:
 
 ### 1. **Setting Up FastAPI:**
 #### a. Installation:
@@ -169,7 +169,7 @@ This command will start your FastAPI application on port 8000.
 Setting up Nginx in front of FastAPI can improve performance and security:
 
 - Install Nginx on your server.
-- Configure Nginx to act as a reverse proxy to pass requests to FastAPI. Here’s a basic configuration snippet:
+- Configure Nginx to act as a reverse proxy to pass requests to FastAPI. Here's a basic configuration snippet:
 
 ```bash
 server {
@@ -189,3 +189,11 @@ server {
 
 - Replace `yourdomain.com` with your actual domain name.
 - Ensure that Nginx is configured to start automatically.
+
+## Front End Example
+
+For an example of how to implement a front end for this application, check out the code at https://github.com/DarrenZal/Myseelia. This repository contains a complete implementation of a chat interface that works with the ChatDKG backend.
+
+## Twitter Bot Integration
+
+The `twitterBot` folder contains code for a Twitter bot that can forward tweets to your ChatDKG application. When users tag the bot in their tweets, it will automatically forward the content to the `app.py` application for processing. This enables integration with Twitter conversations and allows users to interact with your knowledge graph directly through Twitter.
