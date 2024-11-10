@@ -12,6 +12,7 @@ examples/utils/output.tsv
 examples/langchain/did_dkg_otp_0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f_1063242.json
 examples/langchain/did_dkg_otp_0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f_1165451.json
 examples/langchain/did_dkg_otp_0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f_1165625.json
+examples/langchain/hide/*
 examples/utils/output.tsv
 examples/utils/investor_data.json
 examples/utils/combined_data.json

@@ -20,7 +20,10 @@ const dkg = new DKG({
  // Function to get the asset and write to a file
 async function getAssetAndWriteToFile(UAL) {
   try {
-    const getAssetResult = await dkg.asset.get(UAL);
+    const options = {
+      state: "LATEST"
+    };
+    const getAssetResult = await dkg.asset.get(UAL, options);
     const resultString = JSON.stringify(getAssetResult, null, 2);
 
     // Define the filename
@@ -36,7 +39,7 @@ async function getAssetAndWriteToFile(UAL) {
 } 
 
 
-getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/978463"); //replace the KA UAL with your own
+getAssetAndWriteToFile("did:dkg:otp/0x1a061136ed9f5ed69395f18961a0a535ef4b3e5f/2679640"); //replace the KA UAL with your own
 
 
 

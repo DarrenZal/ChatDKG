@@ -6,34 +6,20 @@ import fs from "fs";
 const jsonData = JSON.parse(fs.readFileSync("../utils/data.json"));
 
 const dkg = new DKG({
-  endpoint: process.env.ENDPOINT_MAINNET,
-  port: 8900,
+  endpoint: process.env.OT_NODE_HOSTNAME,
   blockchain: {
-    name: 'otp::mainnet',
-    publicKey: process.env.WALLET_PUBLIC_KEY_MAINNET,
-    privateKey: process.env.WALLET_PRIVATE_KEY_MAINNET,
+    name: "otp::testnet",
+    publicKey: process.env.WALLET_PUBLIC_KEY,
+    privateKey: process.env.WALLET_PRIVATE_KEY,
   },
 });
 
-/* console.log("increasing allowance");
-await dkg.asset.increaseAllowance('4569429592284014000');
-console.log("done increasing allowance"); */
 
-// Function to create a Knowledge Asset on OriginTrail DKG
-async function createKnowledgeAsset(data) {
-  try {
-   // const creationResult = await dkg.asset.burn();
-   const creationResult = await dkg.asset.create(data, { epochsNum: 1 });
-    console.log(`Knowledge asset UAL: ${creationResult.UAL}`);
-  } catch (error) {
-    console.error("Error creating Knowledge Asset:", error);
-  }
-}
-
-
+// NOTE: You will need OTP and TRAC testnet tokens for the next operation. You can get them on the OriginTrail Discord token faucet, as explained here: 
+// https://docs.origintrail.io/decentralized-knowledge-graph-layer-2/testnet-node-setup-instructions/fund-your-v6-testnet-node
 (async () => {
-  for (const section in jsonData) {
-     console.log(`Creating Knowledge Asset for section: ${section}`);
-     await createKnowledgeAsset(jsonData[section]);
-  }
+  // creating a Knowledge Asset on OriginTrail DKG
+   const creationResult = await dkg.asset.create(jsonData, { epochsNum: 1 });
+
+   console.log(`Knowledge asset UAL: ${creationResult.UAL}`);
 })();

@@ -1,0 +1,30 @@
+{
+  "operation": {
+    "publicGet": {
+      "operationId": "1c59e687-ffaf-454e-89d8-509b2d8cb8dd",
+      "status": "COMPLETED"
+    }
+  },
+  "assertion": [
+    {
+      "@id": "http://example.org/investors/Investor123",
+      "http://schema.org/investment": [
+        {
+          "@id": "http://example.org/companies/BioGenX"
+        },
+        {
+          "@id": "http://example.org/companies/CleanEnergyCo"
+        },
+        {
+          "@id": "http://example.org/companies/WindPowerInc"
+        }
+      ],
+      "http://schema.org/name": [
+        {
+          "@value": "Investor ABC"
+        }
+      ]
+    }
+  ],
+  "assertionId": "0x2124ca2887137bf9f588379136cd144ffd66ad6705841464a4896be605a92306"
+}
