@@ -7,7 +7,6 @@ In contrast to generative QA systems such as ChatGPT, an extractive system doesn
 Additionally, to extend the extractive approach, we also demonstrate an "extract & summarize" approach that takes the extracted content from the Knowledge Asset and submits it to an LLM (in this case OpenAI) to summarize.
 
 Additionally, this code can turn a question into a SPARQL query and run it on the DKG. This code has been adapted to function as a FastAPI backend, serving requests from a front end, such as a chatbot web app.
-The code for the front end can be found here: https://github.com/DarrenZal/Myseelia
 
 The repository also includes a Twitter Bot implementation in the `twitterBot` folder. This bot can forward tweets from users who tag it to the `app.py` application, enabling integration with Twitter conversations.
 
